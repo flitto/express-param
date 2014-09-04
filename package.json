@@ -7,9 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "jays",
-  "license": "ISC",
   "dependencies": {
     "express": "^4.8.7",
+    "should": "^4.0.4",
     "supertest": "^0.13.0",
     "underscore": "^1.7.0"
   }
