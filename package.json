@@ -1,17 +1,25 @@
 {
   "name": "fetchParams",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "fetch expressjs params and check validation",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "author": "jays",
+  "keywords": [
+    "express",
+    "parameters",
+    "fetch",
+    "querystring"
+  ],
   "license": "MIT",
   "dependencies": {
+    "underscore": "^1.7.0"
+  },
+  "devDependencies": {
     "express": "^4.8.7",
     "should": "^4.0.4",
-    "supertest": "^0.13.0",
-    "underscore": "^1.7.0"
+    "supertest": "^0.13.0"
   }
 }
