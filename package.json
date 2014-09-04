@@ -1,0 +1,16 @@
+{
+  "name": "fetchParams",
+  "version": "0.0.0",
+  "description": "fetch expressjs params and check validation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "jays",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.8.7",
+    "supertest": "^0.13.0",
+    "underscore": "^1.7.0"
+  }
+}
