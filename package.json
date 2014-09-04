@@ -1,12 +1,8 @@
 {
-  "name": "fetchParams",
+  "name": "express-fetch-params",
   "version": "0.1.0",
   "description": "fetch expressjs params and check validation",
   "main": "index.js",
-  "scripts": {
-    "test": "mocha",
-    "test-cov": "istanbul cover --hook-run-in-context node_modules/mocha/bin/_mocha -- -R spec"
-  },
   "author": "jays",
   "keywords": [
     "express",
@@ -23,5 +19,9 @@
     "express": "^4.8.7",
     "should": "^4.0.4",
     "supertest": "^0.13.0"
+  },
+  "scripts": {
+    "test": "make all",
+    "test-cov": "istanbul cover --hook-run-in-context node_modules/mocha/bin/mocha -- -R spec"
   }
 }
