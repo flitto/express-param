@@ -1,10 +1,15 @@
 var expresss = require('express')
 	, qs = require('querystring')
 	, request = require('supertest')
-	,	fetch = require('../');
+	,	fetcher = require('../');
 
-var app = expresss();
 describe('It can ', function() {
+	var app;
+
+	beforeEach(function(done) {
+		app = expresss();
+		done();
+	});
 
 	it('fetch required Parameters', function(done) {
 		var options
@@ -13,9 +18,11 @@ describe('It can ', function() {
 		app.use(function(req, res, next) {
 			var required = ['id', 'type'];
 
-			options = fetch.fetch(req, required, next);
+			options = fetcher.fetch(req, required);
 
-			return res.send(options);
+			if (options.err) return next(options.err);
+
+			return res.send(options.params);
 		});
 
 		request(app)
@@ -24,15 +31,15 @@ describe('It can ', function() {
 	});
 
 	it('fetch required Parameters with path variable', function(done) {
-		var app = expresss();
 		var options;
 
 		app.get('/path/:id', function(req, res, next) {
 			var required = ['{id}', 'type'];
 
-			options = fetch.fetch(req, required, next);
+			options = fetcher.fetch(req, required);
+			if (options.err) return next(options.err);
 
-			return res.send(options);
+			return res.send(options.params);
 		});
 
 		request(app)
@@ -41,16 +48,16 @@ describe('It can ', function() {
 	});
 
 	it('fetch required parameters with type', function(done) {
-		var app = expresss();
 		var options
 			, queryString = 'id=10&type=number';
 
 		app.get('/path', function(req, res, next) {
 			var required = ['number:id', 'string:type'];
 
-			options = fetch.fetch(req, required, next);
+			options = fetcher.fetch(req, required);
+			if (options.err) return next(options.err);
 
-			return res.send(options);
+			return res.send(options.params);
 		});
 		request(app)
 			.get('/path?' + queryString)
@@ -58,16 +65,16 @@ describe('It can ', function() {
 	});
 
 	it('fetch required parameters with type and path', function(done) {
-		var app = expresss();
 		var options
 			, queryString = 'id=10&type=number';
 
 		app.get('/path/:id', function(req, res, next) {
 			var required = ['number:{id}', 'string:type'];
 
-			options = fetch.fetch(req, required, next);
+			options = fetcher.fetch(req, required);
+			if (options.err) return next(options.err);
 
-			return res.send(options);
+			return res.send(options.params);
 		});
 		request(app)
 			.get('/path/10?type=number')

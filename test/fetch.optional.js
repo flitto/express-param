@@ -1,8 +1,7 @@
 var expresss = require('express')
 	, qs = require('querystring')
-	, should = require('should')
 	, request = require('supertest')
-	,	fetch = require('../');
+	,	fetcher = require('../');
 
 describe('It can ', function() {
 	var app;
@@ -14,15 +13,16 @@ describe('It can ', function() {
 
 	it('fetch optional parameters', function(done) {
 		var opt
-			, queryString = 'id=1&count=20'
+			, queryString = 'id=1&count=20';
 
 		app.get('/path', function(req, res, next) {
 			var required = ['id']
 				, optional = ['count'];
 
-			opt = fetch.fetch(req, required, optional, next);
+			opt = fetcher.fetch(req, required, optional, next);
+			if (opt.err) return next(opt.err);
 
-			return res.send(opt);
+			return res.send(opt.params);
 		});
 
 		request(app)
@@ -38,9 +38,10 @@ describe('It can ', function() {
 			var required = []
 				, optional = ['number:count', 'order'];
 
-			opt = fetch.fetch(req, required, optional, next);
+			opt = fetcher.fetch(req, required, optional, next);
+			if (opt.err) return next(opt.err);
 
-			return res.send(opt);
+			return res.send(opt.params);
 		});
 
 		request(app)
@@ -56,9 +57,10 @@ describe('It can ', function() {
 			var required = []
 				, optional = ['number:count', 'order', 'val|=10'];
 
-			opt = fetch.fetch(req, required, optional, next);
+			opt = fetcher.fetch(req, required, optional, next);
+			if (opt.err) return next(opt.err);
 
-			return res.send(opt);
+			return res.send(opt.params);
 		});
 
 		request(app)
@@ -74,9 +76,10 @@ describe('It can ', function() {
 			var required = []
 				, optional = ['number:count', 'order', 'number:val|=10'];
 
-			opt = fetch.fetch(req, required, optional, next);
+			opt = fetcher.fetch(req, required, optional, next);
+			if (opt.err) return next(opt.err);
 
-			return res.send(opt);
+			return res.send(opt.params);
 		});
 
 		request(app)
