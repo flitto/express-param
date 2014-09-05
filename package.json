@@ -1,0 +1,27 @@
+{
+  "name": "express-param",
+  "version": "0.1.0",
+  "description": "fetch expressjs params and check validation",
+  "main": "index.js",
+  "author": "jays",
+  "keywords": [
+    "express",
+    "parameters",
+    "fetch",
+    "querystring"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "underscore": "^1.7.0"
+  },
+  "devDependencies": {
+    "mocha": "^1.21.4",
+    "express": "^4.8.7",
+    "should": "^4.0.4",
+    "supertest": "^0.13.0"
+  },
+  "scripts": {
+    "test": "make all",
+    "test-cov": "istanbul cover --hook-run-in-context node_modules/mocha/bin/mocha -- -R spec"
+  }
+}
