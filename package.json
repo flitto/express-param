@@ -1,6 +1,6 @@
 {
   "name": "express-param",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "fetch expressjs params and check validation",
   "main": "index.js",
   "author": "jays",
@@ -10,6 +10,14 @@
     "fetch",
     "querystring"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flitto/express-param.git"
+  },
+  "bugs": {
+    "url": "https://github.com/flitto/express-param/issues"
+  },
+  "homepage": "https://https://www.flitto.com/",
   "license": "MIT",
   "dependencies": {
     "underscore": "^1.7.0"
