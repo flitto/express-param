@@ -1,5 +1,5 @@
 {
-  "name": "express-fetch-params",
+  "name": "express-param",
   "version": "0.1.0",
   "description": "fetch expressjs params and check validation",
   "main": "index.js",
