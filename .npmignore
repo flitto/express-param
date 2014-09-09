@@ -1,0 +1,6 @@
+.git*
+benchmarks/
+coverage/
+test/
+.DS_Store
+.idea/

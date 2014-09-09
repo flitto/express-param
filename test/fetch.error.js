@@ -8,6 +8,7 @@ describe('It can ', function() {
 
 	beforeEach(function (done) {
 		app = expresss();
+		app.use(fetcher());
 		done();
 	});
 
@@ -16,7 +17,8 @@ describe('It can ', function() {
 		app.get('/path/:id', function(req, res, next) {
 			var required = ['{id}', 'type', 'order'];
 
-			options = fetcher.fetch(req, required, [], next);
+
+			options = req.fetchParameter(required, []);
 			if (options.err) return next(options.err);
 
 			return res.status(200).send(options.params);

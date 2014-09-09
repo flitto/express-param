@@ -9,6 +9,7 @@ describe('It can ', function() {
 
 	beforeEach(function(done) {
 		app = express();
+		app.use(fetcher());
 		done();
 	});
 
@@ -19,7 +20,7 @@ describe('It can ', function() {
 		app.use(function(req, res, next) {
 			var required = ['id', 'type'];
 
-			options = fetcher.fetch(req, required);
+			options = req.fetchParameter(required);
 
 			if (options.err) return next(options.err);
 
@@ -41,7 +42,7 @@ describe('It can ', function() {
 		app.use(function(req, res, next) {
 			var required = ['id', 'type'];
 
-			options = fetcher.fetch(req, required);
+			options = req.fetchParameter(required);
 
 			if (options.err) return next(options.err);
 
@@ -61,7 +62,7 @@ describe('It can ', function() {
 		app.get('/path/:id', function(req, res, next) {
 			var required = ['{id}', 'type'];
 
-			options = fetcher.fetch(req, required);
+			options = req.fetchParameter(required);
 			if (options.err) return next(options.err);
 
 			return res.send(options.params);
@@ -79,7 +80,7 @@ describe('It can ', function() {
 		app.get('/path', function(req, res, next) {
 			var required = ['number:id', 'string:type'];
 
-			options = fetcher.fetch(req, required);
+			options = req.fetchParameter(required);
 			if (options.err) return next(options.err);
 
 			return res.send(options.params);
@@ -96,7 +97,7 @@ describe('It can ', function() {
 		app.get('/path/:id', function(req, res, next) {
 			var required = ['number:{id}', 'string:type'];
 
-			options = fetcher.fetch(req, required);
+			options = req.fetchParameter(required);
 			if (options.err) return next(options.err);
 
 			return res.send(options.params);
