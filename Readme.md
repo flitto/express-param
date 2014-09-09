@@ -1,6 +1,6 @@
 # Express-param
 
-  Fetch Express.js Request parameters
+  Fetch Express.js Request parameters Middleware
 
 ## About
 
@@ -29,11 +29,12 @@ I was inspired by Spring Framework and Flask.
    var express = require('express');
    var fetcher = require('express-param');
    var app = express();
+   app.use(fetcher());
 
    app.get('/path', function(req, res, next) {
    	var requiredParams = ['id'];
     var optionalParams = ['count'];
-   	var options = fetcher.fetch(req, requiredParams, optionalParams);
+   	var options = req.fetchParamter(requiredParams, optionalParams);
 
     if (options.err) return next(options.err);
 
@@ -46,11 +47,12 @@ I was inspired by Spring Framework and Flask.
 
    var fetcher = require('express-param');
    var app = express();
+   app.use(fetcher());
 
    app.get('/path/:id/', function(req, res, next) {
    	var requiredParams = ['string:{id}'];
     var optionalParams = ['number:count|=10, order|=desc'];
-   	var options = fetcher.fetch(req, requiredParams, optionalParams);
+   	var options = req.fetchParamter(requiredParams, optionalParams);
 
     if (options.err) return next(options.err);
 
@@ -66,7 +68,7 @@ I was inspired by Spring Framework and Flask.
    });
    ```
 ## API
-### fetch(req, required[, optional])
+### fetchParameter(required[, optional])
 fetch parameter of required and optional
 
 ## LICENSE

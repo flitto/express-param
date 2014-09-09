@@ -2,6 +2,9 @@
 
 var fetch = require('./lib/fetchParams.js');
 
-module.exports = {
-	fetch: fetch.fetchParameter
+module.exports = function() {
+	return function(req, res, next) {
+		req.fetchParameter = fetch.fetchParameter.bind({req: req});
+		return next();
+	};
 };

@@ -1,6 +1,6 @@
 {
   "name": "express-param",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "fetch expressjs params and check validation",
   "main": "index.js",
   "author": "jays",
@@ -23,6 +23,7 @@
     "underscore": "^1.7.0"
   },
   "devDependencies": {
+    "body-parser": "^1.8.1",
     "mocha": "^1.21.4",
     "express": "^4.8.7",
     "should": "^4.0.4",

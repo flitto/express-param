@@ -1,5 +1,6 @@
-var expresss = require('express')
+var express = require('express')
 	, qs = require('querystring')
+	, bodyparser = require('body-parser')
 	, request = require('supertest')
 	,	fetcher = require('../');
 
@@ -7,7 +8,8 @@ describe('It can ', function() {
 	var app;
 
 	beforeEach(function(done) {
-		app = expresss();
+		app = express();
+		app.use(fetcher());
 		done();
 	});
 
@@ -18,7 +20,7 @@ describe('It can ', function() {
 		app.use(function(req, res, next) {
 			var required = ['id', 'type'];
 
-			options = fetcher.fetch(req, required);
+			options = req.fetchParameter(required);
 
 			if (options.err) return next(options.err);
 
@@ -30,13 +32,37 @@ describe('It can ', function() {
 			.expect(200, qs.parse(queryString), done);
 	});
 
+	it('fetch required Parameters', function(done) {
+		var options
+			, postData = {id: 1, type: 'int'}
+			, queryString = 'id=1&type=int';
+
+		//method가 POST일때 안되네..
+		app.use(bodyparser());
+		app.use(function(req, res, next) {
+			var required = ['id', 'type'];
+
+			options = req.fetchParameter(required);
+
+			if (options.err) return next(options.err);
+
+			return res.send(options.params);
+		});
+
+		request(app)
+			.post('/required?ab=e')
+			.send(postData)
+			.expect(200, postData, done);
+	});
+
+
 	it('fetch required Parameters with path variable', function(done) {
 		var options;
 
 		app.get('/path/:id', function(req, res, next) {
 			var required = ['{id}', 'type'];
 
-			options = fetcher.fetch(req, required);
+			options = req.fetchParameter(required);
 			if (options.err) return next(options.err);
 
 			return res.send(options.params);
@@ -54,7 +80,7 @@ describe('It can ', function() {
 		app.get('/path', function(req, res, next) {
 			var required = ['number:id', 'string:type'];
 
-			options = fetcher.fetch(req, required);
+			options = req.fetchParameter(required);
 			if (options.err) return next(options.err);
 
 			return res.send(options.params);
@@ -71,7 +97,7 @@ describe('It can ', function() {
 		app.get('/path/:id', function(req, res, next) {
 			var required = ['number:{id}', 'string:type'];
 
-			options = fetcher.fetch(req, required);
+			options = req.fetchParameter(required);
 			if (options.err) return next(options.err);
 
 			return res.send(options.params);

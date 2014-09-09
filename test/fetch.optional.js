@@ -8,6 +8,7 @@ describe('It can ', function() {
 
 	beforeEach(function(done) {
 		app = expresss();
+		app.use(fetcher());
 		done();
 	});
 
@@ -19,7 +20,7 @@ describe('It can ', function() {
 			var required = ['id']
 				, optional = ['count'];
 
-			opt = fetcher.fetch(req, required, optional, next);
+			opt = req.fetchParameter(required, optional);
 			if (opt.err) return next(opt.err);
 
 			return res.send(opt.params);
@@ -38,7 +39,7 @@ describe('It can ', function() {
 			var required = []
 				, optional = ['number:count', 'order'];
 
-			opt = fetcher.fetch(req, required, optional, next);
+			opt = req.fetchParameter(required, optional);
 			if (opt.err) return next(opt.err);
 
 			return res.send(opt.params);
@@ -57,7 +58,7 @@ describe('It can ', function() {
 			var required = []
 				, optional = ['number:count', 'order', 'val|=10'];
 
-			opt = fetcher.fetch(req, required, optional, next);
+			opt = req.fetchParameter(required, optional);
 			if (opt.err) return next(opt.err);
 
 			return res.send(opt.params);
@@ -76,7 +77,7 @@ describe('It can ', function() {
 			var required = []
 				, optional = ['number:count', 'order', 'number:val|=10'];
 
-			opt = fetcher.fetch(req, required, optional, next);
+			opt = req.fetchParameter(required, optional);
 			if (opt.err) return next(opt.err);
 
 			return res.send(opt.params);
