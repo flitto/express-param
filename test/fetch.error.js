@@ -17,14 +17,15 @@ describe('It can ', function() {
 		app.get('/path/:id', function(req, res, next) {
 			var required = ['{id}', 'type', 'order'];
 
-
 			options = req.fetchParameter(required, []);
-			if (options.err) return next(options.err);
 
-			return res.status(200).send(options.params);
+			if (req.checkParamErr(options)) return next(options);
+
+			return res.status(200).send(options);
 		});
+
 		app.use(function(err, req, res, next) {
-			return res.status(400).send(err);
+			return res.status(err.code).send(err.message);
 		});
 
 		request(app)

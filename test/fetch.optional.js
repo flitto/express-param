@@ -21,9 +21,9 @@ describe('It can ', function() {
 				, optional = ['count'];
 
 			opt = req.fetchParameter(required, optional);
-			if (opt.err) return next(opt.err);
+			if (req.checkParamErr(opt)) return next(opt);
 
-			return res.send(opt.params);
+			return res.send(opt);
 		});
 
 		request(app)
@@ -40,9 +40,9 @@ describe('It can ', function() {
 				, optional = ['number:count', 'order'];
 
 			opt = req.fetchParameter(required, optional);
-			if (opt.err) return next(opt.err);
+			if (req.checkParamErr(opt)) return next(opt);
 
-			return res.send(opt.params);
+			return res.send(opt);
 		});
 
 		request(app)
@@ -59,9 +59,9 @@ describe('It can ', function() {
 				, optional = ['number:count', 'order', 'val|=10'];
 
 			opt = req.fetchParameter(required, optional);
-			if (opt.err) return next(opt.err);
+			if (req.checkParamErr(opt)) return next(opt);
 
-			return res.send(opt.params);
+			return res.send(opt);
 		});
 
 		request(app)
@@ -78,9 +78,9 @@ describe('It can ', function() {
 				, optional = ['number:count', 'order', 'number:val|=10'];
 
 			opt = req.fetchParameter(required, optional);
-			if (opt.err) return next(opt.err);
+			if (req.checkParamErr(opt)) return next(opt);
 
-			return res.send(opt.params);
+			return res.send(opt);
 		});
 
 		request(app)
