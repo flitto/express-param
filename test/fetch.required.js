@@ -21,10 +21,9 @@ describe('It can ', function() {
 			var required = ['id', 'type'];
 
 			options = req.fetchParameter(required);
+			if (req.checkParamErr(options)) return next(options);
 
-			if (options.err) return next(options.err);
-
-			return res.send(options.params);
+			return res.send(options);
 		});
 
 		request(app)
@@ -44,9 +43,9 @@ describe('It can ', function() {
 
 			options = req.fetchParameter(required);
 
-			if (options.err) return next(options.err);
+			if (req.checkParamErr(options)) return next(options);
 
-			return res.send(options.params);
+			return res.send(options);
 		});
 
 		request(app)
@@ -63,9 +62,9 @@ describe('It can ', function() {
 			var required = ['{id}', 'type'];
 
 			options = req.fetchParameter(required);
-			if (options.err) return next(options.err);
+			if (req.checkParamErr(options)) return next(options);
 
-			return res.send(options.params);
+			return res.send(options);
 		});
 
 		request(app)
@@ -81,9 +80,9 @@ describe('It can ', function() {
 			var required = ['number:id', 'string:type'];
 
 			options = req.fetchParameter(required);
-			if (options.err) return next(options.err);
+			if (req.checkParamErr(options)) return next(options);
 
-			return res.send(options.params);
+			return res.send(options);
 		});
 		request(app)
 			.get('/path?' + queryString)
@@ -98,9 +97,9 @@ describe('It can ', function() {
 			var required = ['number:{id}', 'string:type'];
 
 			options = req.fetchParameter(required);
-			if (options.err) return next(options.err);
+			if (req.checkParamErr(options)) return next(options);
 
-			return res.send(options.params);
+			return res.send(options);
 		});
 		request(app)
 			.get('/path/10?type=number')
