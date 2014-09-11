@@ -3,6 +3,44 @@
   Fetch Express.js Request parameters Middleware
 
 ## About
+You can reduce count of code line. It can remove redundant code and generate highly  readability.
+
+See below.
+
+- may be existing
+```js
+	function route(req, res, next) {
+    	var id = req.params.id
+        , count = req.param('count') ? parseInt(req.param('count'), 10) : 10
+        , odrer = req.param('order')
+        , type = req.param('type')
+        , name = req.param('name')
+        , since = req.param('since')
+        , from = req.param('from')
+        , res_id = req.param('res_id');
+
+        if (!res_id) return next(400);
+        if (!name) return next(400);
+        if (!order) order = 'desc';
+        if (!type) type = 'integer';
+
+        // some code...
+    }
+```
+- after code
+```js
+	function route(req, res, next) {
+    	var requiredParams = ['{id}', 'name', 'res_id']
+        , optionalParams = ['number:count|=10', 'order|=desc', 'type|=integer', 'since', 'from']
+        , options;
+
+        options = req.fetchParamter(requiredParams, optionalParams);
+
+    	if (req.checkParamErr(options)) return next(options);
+
+		return res.send(options);
+    }
+```
 
 ## parameter syntax
 I was inspired by Spring Framework and Flask.
@@ -36,9 +74,9 @@ I was inspired by Spring Framework and Flask.
     var optionalParams = ['count'];
    	var options = req.fetchParamter(requiredParams, optionalParams);
 
-    if (options.err) return next(options.err);
+    if (req.checkParamErr(options)) return next(options);
 
-    return res.send(options.params);
+    return res.send(options);
    });
    ```
 
@@ -54,9 +92,9 @@ I was inspired by Spring Framework and Flask.
     var optionalParams = ['number:count|=10, order|=desc'];
    	var options = req.fetchParamter(requiredParams, optionalParams);
 
-    if (options.err) return next(options.err);
+    if (req.checkParamErr(options)) return next(options);
 
-    //options.params values is below.
+    //options values is below.
     /*
     	{
         	id: '10',
@@ -64,7 +102,7 @@ I was inspired by Spring Framework and Flask.
             order: 'desc'
         }
     */
-    return res.send(options.params);
+    return res.send(options);
    });
    ```
 ## API
@@ -73,4 +111,5 @@ fetch parameter of required and optional
 
 ## LICENSE
 MIT
+
 
