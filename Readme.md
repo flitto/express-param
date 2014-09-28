@@ -105,6 +105,30 @@ I was inspired by Spring Framework and Flask.
     return res.send(options);
    });
    ```
+## Another example
+   Custom reqeust key name belong to express req property
+   ```js
+   var express = require('express');
+   var fetcher = require('express-param');
+   var app = express();
+   app.use(fetcher({
+    'ipaddr': 'ip'
+   }));
+
+   app.get('/path', function(req, res, next) {
+   	var requiredParams = ['id'];
+    var optionalParams = ['count', 'ipaddr'];
+   	var options = req.fetchParamter(requiredParams, optionalParams);
+
+    if (options.err) return next(options.err);
+
+    /*
+        options.ipaddr is equal to req.ip
+    */
+    return res.send(options.params);
+   });
+   ```
+
 ## API
 ### fetchParameter(required[, optional])
 fetch parameter of required and optional
