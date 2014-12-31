@@ -20,6 +20,7 @@
   "homepage": "https://www.flitto.com/",
   "license": "MIT",
   "dependencies": {
+    "geoip": "^0.5.7",
     "underscore": "^1.7.0"
   },
   "devDependencies": {
