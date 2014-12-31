@@ -133,6 +133,33 @@ I was inspired by Spring Framework and Flask.
 ### fetchParameter(required[, optional])
 fetch parameter of required and optional
 
+## Add ON
+### fetch geographic information
+    It can fetch country information from remote address!
+    ```js
+    var addOnOpt = {
+        geoip: {
+            keyName: 'headers.x-forwarded-for'
+        }
+    };
+    app.use(fetcher({
+        'ipaddr': 'ip'
+    }, addOnOpt));
+    
+    ////// ....
+    
+    console.log(req['x-fetcher-geoinfo'])
+    //// output
+         { country:
+           { country_name: 'United States',
+             country_code: 'US',
+             country_code3: 'USA',
+             continent_code: 'NA' } 
+         }  
+    ///
+    ```
+    
+
 ## LICENSE
 MIT
 
