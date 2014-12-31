@@ -163,4 +163,7 @@ fetch parameter of required and optional
 ## LICENSE
 MIT
 
+---
 
+This product includes GeoLite data created by MaxMind, available from 
+http://www.maxmind.com
