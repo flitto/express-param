@@ -148,7 +148,7 @@ fetch parameter of required and optional
     
     ////// ....
     
-    console.log(req['x-fetcher-geoinfo'])
+    console.log(req.param('x-fetcher-geoinfo'))
     //// output
          { country:
            { country_name: 'United States',
