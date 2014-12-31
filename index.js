@@ -17,7 +17,7 @@ module.exports = function(option, addOn) {
 		req.checkParamErr =  checkErr.checkParamErr;
 
 		if (addOn && addOn.geoip) {
-			req['x-fetcher-geoinfo'] = geoInfo.fetch(req, addOn.geoip);
+			req.body['x-fetcher-geoinfo'] = geoInfo.fetch(req, addOn.geoip);
 		}
 
 		return next();
