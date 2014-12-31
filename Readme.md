@@ -107,6 +107,18 @@ fetch parameter of required and optional
     app.use(fetcher({
         'ipaddr': 'ip'
     }, addOnOpt));
+    
+    ////// ....
+    
+    console.log(req['x-fetcher-geoinfo'])
+    //// output
+         { country:
+           { country_name: 'United States',
+             country_code: 'US',
+             country_code3: 'USA',
+             continent_code: 'NA' } 
+         }  
+    ///
     ```
     
 
