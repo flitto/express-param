@@ -95,6 +95,21 @@ I was inspired by Spring Framework and Flask.
 ### fetchParameter(required[, optional])
 fetch parameter of required and optional
 
+## Add ON
+### fetch geographic information
+    It can fetch country information from remote address!
+    ```js
+    var addOnOpt = {
+        geoip: {
+            keyName: 'headers.x-forwarded-for'
+        }
+    };
+    app.use(fetcher({
+        'ipaddr': 'ip'
+    }, addOnOpt));
+    ```
+    
+
 ## LICENSE
 MIT
 
