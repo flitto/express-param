@@ -1,6 +1,6 @@
 {
   "name": "express-param",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "fetch expressjs params and check validation",
   "main": "index.js",
   "author": "jays",
