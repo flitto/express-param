@@ -17,14 +17,12 @@ module.exports = function(option, addOn) {
 		req.checkParamErr =  checkErr.checkParamErr;
 
 		if (addOn && addOn.geoip) {
-      if (req.params) {
-        req.params['x-fetcher-geoinfo'] = geoInfo.fetch(req, addOn.geoip);
-      } else if (req.body) {
-        req.body['x-fetcher-geoinfo'] = geoInfo.fetch(req, addOn.geoip);
-      } else {
-        req.body = {};
-        req.body['x-fetcher-geoinfo'] = geoInfo.fetch(req, addOn.geoip);
-      }
+			if (req.body) {
+				req.body['x-fetcher-geoinfo'] = geoInfo.fetch(req, addOn.geoip);
+			} else {
+				req.body = {};
+				req.body['x-fetcher-geoinfo'] = geoInfo.fetch(req, addOn.geoip);
+			}
 		}
 
 		return next();
