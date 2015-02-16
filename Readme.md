@@ -135,8 +135,8 @@ fetch parameter of required and optional
 
 ## Add ON
 ### fetch geographic information
-    It can fetch country information from remote address!
-    ```js
+   It can fetch country information from remote address!
+   ```js
     var addOnOpt = {
         geoip: {
             keyName: 'headers.x-forwarded-for'
@@ -157,8 +157,35 @@ fetch parameter of required and optional
              continent_code: 'NA' } 
          }  
     ///
-    ```
+   ```
+### fetch detail imsi information by mnc, mcc code
+   It can generate detail imsi(coutnry, operator...) informtaion by mcc, mnc doe!
+   
     
+   ```js
+    var addOnOpt = {
+        ismi: true
+    };
+    app.use(fetcher({
+        'ipaddr': 'ip'
+    }, addOnOpt));
+    
+    ////// ....
+    
+    // url maybe hostname/api?mnc=11&mcc=450. if only exist mcc then results array length may be greater than 1.
+    
+    console.log(req.param('x-imsi'))
+    //// output
+   [ { country_name: 'South Korea',
+       country_code: 'KR',
+       mcc: '450',
+       mnc: '11',
+       brand: 'SKTelecom',
+       operator: 'Korea Cable Telecom(t-plus), Eco-mobile',
+       status: 'Operational',
+       bands: 'UMTS 2100' } ] }]
+    ///
+   ```    
 
 ## LICENSE
 MIT
