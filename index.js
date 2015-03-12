@@ -18,18 +18,10 @@ module.exports = function(option, addOn) {
 		req.fetchParameter = fetch.fetchParameter.bind({req: req, extraOption: option});
 		req.checkParamErr =  checkErr.checkParamErr;
 
-		if (addOn && addOn.geoip) {
-			if (req.body) {
-				req.body['x-fetcher-geoinfo'] = geoInfo.fetch(req, addOn.geoip);
-			} else {
-				req.body = {};
-				req.body['x-fetcher-geoinfo'] = geoInfo.fetch(req, addOn.geoip);
-			}
-		}
-
-		if (addOn.imsi) {
-			imsi.addImsi(req);
-		}
+    if (addOn) {
+      if (addOn.geoip) req.headers['x-flt-geoinfo'] = geoInfo.fetch(req, addOn.geoip);
+      if (addOn.imsi) imsi.addImsi(req);
+    }
 
 		return next();
 	};
