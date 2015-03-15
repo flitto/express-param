@@ -1,6 +1,6 @@
 {
   "name": "express-param",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "fetch expressjs params and check validation",
   "main": "index.js",
   "author": "jays",
@@ -28,7 +28,8 @@
     "mocha": "^1.21.4",
     "express": "^4.8.7",
     "should": "^4.0.4",
-    "supertest": "^0.13.0"
+    "supertest": "^0.13.0",
+    "json-diff": "^0.3.1"
   },
   "scripts": {
     "test": "make all",

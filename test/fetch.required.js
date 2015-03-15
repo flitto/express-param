@@ -37,7 +37,10 @@ describe('It can ', function() {
 			, queryString = 'id=1&type=int';
 
 		//method가 POST일때 안되네..
-		app.use(bodyparser());
+		app.use(bodyparser.json());
+    app.use(bodyparser.urlencoded({
+      extended: true
+    }));
 		app.use(function(req, res, next) {
 			var required = ['id', 'type'];
 

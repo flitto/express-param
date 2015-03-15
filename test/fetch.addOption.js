@@ -33,7 +33,7 @@ describe('It can ', function() {
 
 		request(app)
 			.get('/required?' + queryString)
-			.expect(200, qs.parse(queryString + '&ipaddr=127.0.0.1'), done);
+			.expect(200, qs.parse(queryString + '&ipaddr=::ffff:127.0.0.1'), done);
 	});
 
 });
