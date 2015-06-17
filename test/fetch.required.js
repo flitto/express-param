@@ -75,6 +75,23 @@ describe('It can ', function() {
 			.expect(200, '{"id":"10","type":"int"}', done);
 	});
 
+	it('fetch required Parameters with path underline variable', function(done) {
+		var options;
+
+		app.get('/path/:cut_tr_id', function(req, res, next) {
+			var required = ['{cut_tr_id}', 'type'];
+
+			options = req.fetchParameter(required);
+			if (req.checkParamErr(options)) return next(options);
+
+			return res.send(options);
+		});
+
+		request(app)
+			.get('/path/11?type=int')
+			.expect(200, '{"cut_tr_id":"11","type":"int"}', done);
+	});
+
 	it('fetch required parameters with type', function(done) {
 		var options
 			, queryString = 'id=10&type=number';
