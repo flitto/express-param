@@ -1,39 +1,39 @@
 var expresss = require('express')
-	, qs = require('querystring')
-	, request = require('supertest')
-	,	fetcher = require('../');
+  , qs = require('querystring')
+  , request = require('supertest')
+  ,  fetcher = require('../');
 
 describe('It can ', function() {
-	var app;
+  var app;
 
-	beforeEach(function (done) {
-		app = expresss();
-		//additional custom option
-		// key : your key name within http request
-		// val : default property of req(express value)
-		app.use(fetcher({
-			user: 'user',
-			ipaddr: 'ip'
-		}));
-		done();
-	});
+  beforeEach(function (done) {
+    app = expresss();
+    //additional custom option
+    // key : your key name within http request
+    // val : default property of req(express value)
+    app.use(fetcher({
+      user: 'user',
+      ipaddr: 'ip'
+    }));
+    done();
+  });
 
-	it('fetch required Parameters', function(done) {
-		var options
-			, queryString = 'id=1&type=int';
+  it('fetch required Parameters', function(done) {
+    var options
+      , queryString = 'id=1&type=int';
 
-		app.use(function(req, res, next) {
-			var required = ['id', 'type', 'ipaddr'];
+    app.use(function(req, res, next) {
+      var required = ['id', 'type', 'ipaddr'];
 
-			options = req.fetchParameter(required);
-			if (req.checkParamErr(options)) return next(options);
+      options = req.fetchParameter(required);
+      if (req.checkParamErr(options)) return next(options);
 
-			return res.send(options);
-		});
+      return res.send(options);
+    });
 
-		request(app)
-			.get('/required?' + queryString)
-			.expect(200, qs.parse(queryString + '&ipaddr=::ffff:127.0.0.1'), done);
-	});
+    request(app)
+      .get('/required?' + queryString)
+      .expect(200, qs.parse(queryString + '&ipaddr=::ffff:127.0.0.1'), done);
+  });
 
 });
