@@ -87,4 +87,22 @@ describe('It can ', function() {
       .get('/path?' + queryString)
       .expect(200, qs.parse(queryString + '&val=10'), done)
   });
+
+  it('fetch optional parameters input number 0', function(done) {
+    var opt
+      , queryString = 'id=0&type=number';
+
+    app.get('/path', function(req, res, next) {
+      var required = []
+        , optional = ['number:id|=10', 'string:type'];
+
+      opt = req.fetchParameter(required, optional);
+      if (req.checkParamErr(opt)) return next(opt);
+
+      return res.send(opt);
+    });
+    request(app)
+      .get('/path?' + queryString)
+      .expect(200, qs.parse(queryString), done);
+  });
 });
