@@ -33,8 +33,7 @@ describe('It can ', function() {
 
   it('fetch required Parameters', function(done) {
     var options
-      , postData = {id: 1, type: 'int'}
-      , queryString = 'id=1&type=int';
+      , postData = {id: 1, type: 'int'};
 
     //method가 POST일때 안되네..
     app.use(bodyparser.json());
@@ -109,9 +108,42 @@ describe('It can ', function() {
       .expect(200, qs.parse(queryString), done);
   });
 
-  it('fetch required parameters with type and path', function(done) {
+  it('fetch float parameter with type number', function(done) {
     var options
-      , queryString = 'id=10&type=number';
+      , queryString = 'id=10.1&type=number';
+
+    app.get('/path', function(req, res, next) {
+      var required = ['number:id', 'string:type'];
+
+      options = req.fetchParameter(required);
+      if (req.checkParamErr(options)) return next(options);
+
+      return res.send(options);
+    });
+    request(app)
+      .get('/path?' + queryString)
+      .expect(200, qs.parse(queryString), done);
+  });
+
+  it('fetch float parameter with type number', function(done) {
+    var options
+      , queryString = 'id=9.999999999999999999999999&type=number';
+
+    app.get('/path', function(req, res, next) {
+      var required = ['number:id', 'string:type'];
+
+      options = req.fetchParameter(required);
+      if (req.checkParamErr(options)) return next(options);
+
+      return res.send(options);
+    });
+    request(app)
+      .get('/path?' + queryString)
+      .expect(200, qs.parse(queryString), done);
+  });
+
+  it('fetch required parameters with type and path', function(done) {
+    var options;
 
     app.get('/path/:id', function(req, res, next) {
       var required = ['number:{id}', 'string:type'];
@@ -125,4 +157,5 @@ describe('It can ', function() {
       .get('/path/10?type=number')
       .expect(200, '{"id":10,"type":"number"}', done);
   });
+
 });
