@@ -21,14 +21,14 @@
   "license": "MIT",
   "dependencies": {
     "geoip": "^0.6.1",
-    "underscore": "^1.7.0"
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
-    "body-parser": "^1.8.1",
-    "mocha": "^1.21.4",
-    "express": "^4.8.7",
-    "should": "^4.0.4",
-    "supertest": "^0.13.0",
+    "body-parser": "^1.15.0",
+    "mocha": "^2.4.5",
+    "express": "^4.13.4",
+    "should": "^8.3.0",
+    "supertest": "^1.2.0",
     "json-diff": "^0.3.1"
   },
   "scripts": {
