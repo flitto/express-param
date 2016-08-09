@@ -54,7 +54,7 @@ I was inspired by Spring Framework and Flask.
     - [element1, element2, element3, ...]
     - type:{parameter_name}
     	- type: type is optional(default string). number or string. return variable with type.
-        - {paremeter_name}: {} is optional. but paremeter name is required. if it include {}, it means that this is path variable
+        - {parameter_name}: {} is optional. but parameter name is required. if it include {}, it means that this is path variable
         - ex) ['number:{flitto_id}], 'string:req_id', 'res_id']
 - optional parameter
 	- Array
@@ -113,7 +113,7 @@ app.get('/path/:id/', function(req, res, next) {
 ```
 
 ## Another example
-   Custom reqeust key name belong to express req property
+   Custom request key name belong to req property of express 
 
 ```js
 var express = require('express');
@@ -176,12 +176,12 @@ console.log(req.param('x-fetcher-geoinfo'))
 
 - **fetch detail imsi information by mnc, mcc code**
 
-   It can generate detail imsi(coutnry, operator...) informtaion by mcc, mnc doe!
+   It can generate detail imsi(country, operator...) information by mcc, mnc code!
    
     
 ```js
 var addOnOpt = {
-  ismi: true
+  imsi: true
 };
 app.use(fetcher({
   'ipaddr': 'ip'
