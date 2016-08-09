@@ -33,6 +33,7 @@
   },
   "scripts": {
     "test": "make all",
+    "test-ci": "mocha",
     "test-cov": "istanbul cover --hook-run-in-context node_modules/mocha/bin/mocha -- -R spec"
   }
 }
