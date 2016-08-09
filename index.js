@@ -16,7 +16,7 @@ var fetch = require('./lib/fetchParams.js')
 module.exports = function(option, addOn) {
   return function(req, res, next) {
     req.fetchParameter = fetch.fetchParameter.bind({req: req, extraOption: option});
-    req.checkParamErr =  checkErr.checkParamErr;
+    req.checkParamErr = checkErr.checkParamErr;
 
     if (addOn) {
       if (addOn.geoip) req.headers['x-flt-geoinfo'] = geoInfo.fetch(req, addOn.geoip);

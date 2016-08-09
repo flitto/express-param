@@ -5,7 +5,7 @@ var expresss = require('express')
   , request = require('supertest')
   , imsiList = require('../dat/mcc_mnc.json')
   , jsonDiff = require('json-diff').diff
-  ,  fetcher = require('../');
+  , fetcher = require('../');
 
 describe('It can ', function() {
   var app

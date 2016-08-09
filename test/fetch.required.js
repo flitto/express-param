@@ -2,7 +2,7 @@ var express = require('express')
   , qs = require('querystring')
   , bodyparser = require('body-parser')
   , request = require('supertest')
-  ,  fetcher = require('../');
+  , fetcher = require('../');
 
 describe('It can ', function() {
   var app;
