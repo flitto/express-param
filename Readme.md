@@ -1,6 +1,8 @@
-# Express-param
+# express-param
 
   Fetch Express.js Request parameters Middleware
+
+  [![Build Status](https://travis-ci.org/flitto/express-param.svg?branch=master)](https://travis-ci.org/flitto/express-param)
 
 ## About
 You can reduce amount of code. It can remove redundant code and generate high readability.
