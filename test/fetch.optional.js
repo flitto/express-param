@@ -1,7 +1,7 @@
 var expresss = require('express')
   , qs = require('querystring')
   , request = require('supertest')
-  ,  fetcher = require('../');
+  , fetcher = require('../');
 
 describe('It can ', function() {
   var app;
