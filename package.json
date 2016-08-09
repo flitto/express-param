@@ -3,7 +3,7 @@
   "version": "0.7.4",
   "description": "fetch expressjs params and check validation",
   "main": "index.js",
-  "author": "jays",
+  "author": "Flitto Inc.",
   "keywords": [
     "express",
     "parameters",
@@ -33,6 +33,7 @@
   },
   "scripts": {
     "test": "make all",
+    "test-ci": "mocha",
     "test-cov": "istanbul cover --hook-run-in-context node_modules/mocha/bin/mocha -- -R spec"
   }
 }

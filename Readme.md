@@ -3,43 +3,43 @@
   Fetch Express.js Request parameters Middleware
 
 ## About
-You can reduce count of code line. It can remove redundant code and generate highly  readability.
+You can reduce amount of code. It can remove redundant code and generate high readability.
 
 See below.
 
 - may be existing
 ```js
-	function route(req, res, next) {
-    	var id = req.params.id
-        , count = req.param('count') ? parseInt(req.param('count'), 10) : 10
-        , odrer = req.param('order')
-        , type = req.param('type')
-        , name = req.param('name')
-        , since = req.param('since')
-        , from = req.param('from')
-        , res_id = req.param('res_id');
+function route(req, res, next) {
+  var id = req.params.id
+    , count = req.param('count') ? parseInt(req.param('count'), 10) : 10
+    , odrer = req.param('order')
+    , type = req.param('type')
+    , name = req.param('name')
+    , since = req.param('since')
+    , from = req.param('from')
+    , res_id = req.param('res_id');
 
-        if (!res_id) return next(400);
-        if (!name) return next(400);
-        if (!order) order = 'desc';
-        if (!type) type = 'integer';
+  if (!res_id) return next(400);
+  if (!name) return next(400);
+  if (!order) order = 'desc';
+  if (!type) type = 'integer';
 
-        // some code...
-    }
+  // some code...
+}
 ```
-- after code
+- after using this
 ```js
-	function route(req, res, next) {
-    	var requiredParams = ['{id}', 'name', 'res_id']
-        , optionalParams = ['number:count|=10', 'order|=desc', 'type|=integer', 'since', 'from']
-        , options;
+function route(req, res, next) {
+  var requiredParams = ['{id}', 'name', 'res_id']
+    , optionalParams = ['number:count|=10', 'order|=desc', 'type|=integer', 'since', 'from']
+    , options;
 
-        options = req.fetchParamter(requiredParams, optionalParams);
+  options = req.fetchParamter(requiredParams, optionalParams);
 
-    	if (req.checkParamErr(options)) return next(options);
+  if (req.checkParamErr(options)) return next(options);
 
-		return res.send(options);
-    }
+	return res.send(options);
+}
 ```
 
 ## parameter syntax
@@ -63,70 +63,69 @@ I was inspired by Spring Framework and Flask.
 
 ## Example
    Here is an simple example.
-   ```js
-   var express = require('express');
-   var fetcher = require('express-param');
-   var app = express();
-   app.use(fetcher());
+```js
+var express = require('express');
+var fetcher = require('express-param');
+var app = express();
+app.use(fetcher());
 
-   app.get('/path', function(req, res, next) {
-   	var requiredParams = ['id'];
-    var optionalParams = ['count'];
-   	var options = req.fetchParamter(requiredParams, optionalParams);
+app.get('/path', function(req, res, next) {
+  var requiredParams = ['id'];
+  var optionalParams = ['count'];
+  var options = req.fetchParamter(requiredParams, optionalParams);
 
-    if (req.checkParamErr(options)) return next(options);
+  if (req.checkParamErr(options)) return next(options);
 
-    return res.send(options);
-   });
-   ```
+  return res.send(options);
+});
+```
 
    Here is another example with express-param syntax
    ```js
+var fetcher = require('express-param');
+var app = express();
+app.use(fetcher());
 
-   var fetcher = require('express-param');
-   var app = express();
-   app.use(fetcher());
+app.get('/path/:id/', function(req, res, next) {
+  var requiredParams = ['string:{id}'];
+  var optionalParams = ['number:count|=10, order|=desc'];
+  var options = req.fetchParamter(requiredParams, optionalParams);
 
-   app.get('/path/:id/', function(req, res, next) {
-   	var requiredParams = ['string:{id}'];
-    var optionalParams = ['number:count|=10, order|=desc'];
-   	var options = req.fetchParamter(requiredParams, optionalParams);
+  if (req.checkParamErr(options)) return next(options);
 
-    if (req.checkParamErr(options)) return next(options);
-
-    //options values is below.
-    /*
-    	{
-        	id: '10',
-            count: 10
-            order: 'desc'
-        }
-    */
-    return res.send(options);
-   });
-   ```
+  //options values is below.
+  /*
+  {
+    id: '10',
+    count: 10
+    order: 'desc'
+  }
+  */
+  return res.send(options);
+});
+```
 ## Another example
    Custom reqeust key name belong to express req property
    ```js
-   var express = require('express');
-   var fetcher = require('express-param');
-   var app = express();
-   app.use(fetcher({
-    'ipaddr': 'ip'
-   }));
+var express = require('express');
+var fetcher = require('express-param');
+var app = express();
+app.use(fetcher({
+  'ipaddr': 'ip'
+}));
 
-   app.get('/path', function(req, res, next) {
-   	var requiredParams = ['id'];
-    var optionalParams = ['count', 'ipaddr'];
-   	var options = req.fetchParamter(requiredParams, optionalParams);
+app.get('/path', function(req, res, next) {
+  var requiredParams = ['id'];
+  var optionalParams = ['count', 'ipaddr'];
+  var options = req.fetchParamter(requiredParams, optionalParams);
 
-    if (options.err) return next(options.err);
+  if (options.err) return next(options.err);
 
-    /*
-        options.ipaddr is equal to req.ip
-    */
-    return res.send(options.params);
-   });
+  /*
+  options.ipaddr is equal to req.ip
+  */
+  return res.send(options.params);
+});
    ```
 
 ## API
@@ -137,54 +136,59 @@ fetch parameter of required and optional
 ### fetch geographic information
    It can fetch country information from remote address!
    ```js
-    var addOnOpt = {
-        geoip: {
-            keyName: 'headers.x-forwarded-for'
-        }
-    };
-    app.use(fetcher({
-        'ipaddr': 'ip'
-    }, addOnOpt));
-    
-    ////// ....
-    
-    console.log(req.param('x-fetcher-geoinfo'))
-    //// output
-         { country:
-           { country_name: 'United States',
-             country_code: 'US',
-             country_code3: 'USA',
-             continent_code: 'NA' } 
-         }  
-    ///
+var addOnOpt = {
+  geoip: {
+    keyName: 'headers.x-forwarded-for'
+  }
+};
+app.use(fetcher({
+  'ipaddr': 'ip'
+}, addOnOpt));
+
+////// ....
+
+console.log(req.param('x-fetcher-geoinfo'))
+//// output
+{
+  country:
+  {
+    country_name: 'United States',
+    country_code: 'US',
+    country_code3: 'USA',
+    continent_code: 'NA'
+  } 
+}  
+///
    ```
 ### fetch detail imsi information by mnc, mcc code
    It can generate detail imsi(coutnry, operator...) informtaion by mcc, mnc doe!
    
     
    ```js
-    var addOnOpt = {
-        ismi: true
-    };
-    app.use(fetcher({
-        'ipaddr': 'ip'
-    }, addOnOpt));
-    
-    ////// ....
-    
-    // url maybe hostname/api?mnc=11&mcc=450. if only exist mcc then results array length may be greater than 1.
-    
-    console.log(req.param('x-imsi'))
-    //// output
-   [ { country_name: 'South Korea',
-       country_code: 'KR',
-       mcc: '450',
-       mnc: '11',
-       brand: 'SKTelecom',
-       operator: 'Korea Cable Telecom(t-plus), Eco-mobile',
-       status: 'Operational',
-       bands: 'UMTS 2100' } ] }]
-    ///
+var addOnOpt = {
+  ismi: true
+};
+app.use(fetcher({
+  'ipaddr': 'ip'
+}, addOnOpt));
+
+////// ....
+
+// url maybe hostname/api?mnc=11&mcc=450. if only exist mcc then results array length may be greater than 1.
+
+console.log(req.param('x-imsi'))
+//// output
+[{
+  country_name: 'South Korea',
+  country_code: 'KR',
+  mcc: '450',
+  mnc: '11',
+  brand: 'SKTelecom',
+  operator: 'Korea Cable Telecom(t-plus), Eco-mobile',
+  status: 'Operational',
+  bands: 'UMTS 2100'
+}]
+///
    ```    
 
 ## LICENSE
