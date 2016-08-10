@@ -10,6 +10,7 @@ You can reduce amount of code. It can remove redundant code and generate high re
 See below.
 
 - may be existing
+
 ```js
 function route(req, res, next) {
   var id = req.params.id
@@ -29,7 +30,9 @@ function route(req, res, next) {
   // some code...
 }
 ```
+
 - after using this
+
 ```js
 function route(req, res, next) {
   var requiredParams = ['{id}', 'name', 'res_id']
@@ -51,7 +54,7 @@ I was inspired by Spring Framework and Flask.
     - [element1, element2, element3, ...]
     - type:{parameter_name}
     	- type: type is optional(default string). number or string. return variable with type.
-        - {paremeter_name}: {} is optional. but paremeter name is required. if it include {}, it means that this is path variable
+        - {parameter_name}: {} is optional. but parameter name is required. if it include {}, it means that this is path variable
         - ex) ['number:{flitto_id}], 'string:req_id', 'res_id']
 - optional parameter
 	- Array
@@ -65,6 +68,7 @@ I was inspired by Spring Framework and Flask.
 
 ## Example
    Here is an simple example.
+   
 ```js
 var express = require('express');
 var fetcher = require('express-param');
@@ -83,7 +87,8 @@ app.get('/path', function(req, res, next) {
 ```
 
    Here is another example with express-param syntax
-   ```js
+
+```js
 var fetcher = require('express-param');
 var app = express();
 app.use(fetcher());
@@ -106,9 +111,11 @@ app.get('/path/:id/', function(req, res, next) {
   return res.send(options);
 });
 ```
+
 ## Another example
-   Custom reqeust key name belong to express req property
-   ```js
+   Custom request key name belong to req property of express 
+
+```js
 var express = require('express');
 var fetcher = require('express-param');
 var app = express();
@@ -128,16 +135,20 @@ app.get('/path', function(req, res, next) {
   */
   return res.send(options.params);
 });
-   ```
+```
 
 ## API
-### fetchParameter(required[, optional])
-fetch parameter of required and optional
+
+- **fetchParameter(required[, optional])**
+
+     fetch parameter of required and optional
 
 ## Add ON
-### fetch geographic information
+- **fetch geographic information**
+
    It can fetch country information from remote address!
-   ```js
+   
+```js
 var addOnOpt = {
   geoip: {
     keyName: 'headers.x-forwarded-for'
@@ -161,14 +172,16 @@ console.log(req.param('x-fetcher-geoinfo'))
   } 
 }  
 ///
-   ```
-### fetch detail imsi information by mnc, mcc code
-   It can generate detail imsi(coutnry, operator...) informtaion by mcc, mnc doe!
+```
+
+- **fetch detail imsi information by mnc, mcc code**
+
+   It can generate detail imsi(country, operator...) information by mcc, mnc code!
    
     
-   ```js
+```js
 var addOnOpt = {
-  ismi: true
+  imsi: true
 };
 app.use(fetcher({
   'ipaddr': 'ip'
@@ -191,7 +204,13 @@ console.log(req.param('x-imsi'))
   bands: 'UMTS 2100'
 }]
 ///
-   ```    
+```    
+
+## Contributing
+
+We'd love your contributions! Please send us Pull Requests. Also, read the [contribution guidelines](https://github.com/SungYeolWoo/express-param/blob/master/Contribution.md).
+
+
 
 ## LICENSE
 MIT
