@@ -1,10 +1,12 @@
 # express-param
 
-  Fetch Express.js Request parameters Middleware
+Express.js request parameters parsing middleware
 
-  [![Build Status](https://travis-ci.org/flitto/express-param.svg?branch=master)](https://travis-ci.org/flitto/express-param)
+[![Build Status](https://travis-ci.org/flitto/express-param.svg?branch=master)](https://travis-ci.org/flitto/express-param)
+<span class="badge-npmversion"><a href="https://npmjs.org/package/express-param" title="View this project on NPM"><img src="https://img.shields.io/npm/v/express-param.svg" alt="NPM version" /></a></span>
 
 ## About
+
 You can reduce amount of code. It can remove redundant code and generate high readability.
 
 See below.
@@ -48,6 +50,7 @@ function route(req, res, next) {
 ```
 
 ## parameter syntax
+
 I was inspired by Spring Framework and Flask.
 - required parameter
 	- Array
@@ -55,7 +58,7 @@ I was inspired by Spring Framework and Flask.
     - type:{parameter_name}
     	- type: type is optional(default string). number or string. return variable with type.
         - {parameter_name}: {} is optional. but parameter name is required. if it include {}, it means that this is path variable
-        - ex) ['number:{flitto_id}], 'string:req_id', 'res_id']
+        - ex) ['number:{id1}], 'string:id2', 'id3']
 - optional parameter
 	- Array
     - [element1, element2, element3, ...]
@@ -63,11 +66,12 @@ I was inspired by Spring Framework and Flask.
     	- type: type is optional(default string). number or string. return variable with type.
         - parameter_name: required.
         - default_value: optional. if request object do not have specified parameter then assign this default value.
-        - ex) ['number:count', 'order', 'string:res_list|=Y']
+        - ex) ['number:count', 'order', 'string:option1|=Y']
 
 
 ## Example
-   Here is an simple example.
+
+Here is a simple example.
    
 ```js
 var express = require('express');
@@ -86,7 +90,7 @@ app.get('/path', function(req, res, next) {
 });
 ```
 
-   Here is another example with express-param syntax
+Here is another example with express-param syntax
 
 ```js
 var fetcher = require('express-param');
@@ -113,7 +117,8 @@ app.get('/path/:id/', function(req, res, next) {
 ```
 
 ## Another example
-   Custom request key name belong to req property of express 
+
+Custom request key name belong to req property of express 
 
 ```js
 var express = require('express');
@@ -141,12 +146,13 @@ app.get('/path', function(req, res, next) {
 
 - **fetchParameter(required[, optional])**
 
-     fetch parameter of required and optional
+  fetch parameters that are required and optional
 
 ## Add ON
+
 - **fetch geographic information**
 
-   It can fetch country information from remote address!
+  It can fetch country information from remote ip address!
    
 ```js
 var addOnOpt = {
@@ -176,7 +182,7 @@ console.log(req.param('x-fetcher-geoinfo'))
 
 - **fetch detail imsi information by mnc, mcc code**
 
-   It can generate detail imsi(country, operator...) information by mcc, mnc code!
+  It can generate detail imsi(country, operator...) information by mcc, mnc code!
    
     
 ```js
@@ -213,6 +219,7 @@ We'd love your contributions! Please send us Pull Requests. Also, read the [cont
 
 
 ## LICENSE
+
 MIT
 
 ---
