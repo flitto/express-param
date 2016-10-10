@@ -72,7 +72,7 @@ I was inspired by Spring Framework and Flask.
 ## Example
 
 Here is a simple example.
-   
+
 ```js
 var express = require('express');
 var fetcher = require('express-param');
@@ -118,7 +118,7 @@ app.get('/path/:id/', function(req, res, next) {
 
 ## Another example
 
-Custom request key name belong to req property of express 
+Custom request key name belong to req property of express
 
 ```js
 var express = require('express');
@@ -153,7 +153,7 @@ app.get('/path', function(req, res, next) {
 - **fetch geographic information**
 
   It can fetch country information from remote ip address!
-   
+
 ```js
 var addOnOpt = {
   geoip: {
@@ -171,11 +171,12 @@ console.log(req.param('x-fetcher-geoinfo'))
 {
   country:
   {
-    country_name: 'United States',
-    country_code: 'US',
-    country_code3: 'USA',
-    continent_code: 'NA'
-  } 
+    range: [ 3479299040, 3479299071 ],
+    country: 'US',
+    region: 'CA',
+    city: 'San Francisco',
+    ll: [37.7484, -122.4156]
+  }
 }  
 ///
 ```
@@ -183,8 +184,8 @@ console.log(req.param('x-fetcher-geoinfo'))
 - **fetch detail imsi information by mnc, mcc code**
 
   It can generate detail imsi(country, operator...) information by mcc, mnc code!
-   
-    
+
+
 ```js
 var addOnOpt = {
   imsi: true
@@ -224,5 +225,5 @@ MIT
 
 ---
 
-This product includes GeoLite data created by MaxMind, available from 
+This product includes GeoLite data created by MaxMind, available from
 http://www.maxmind.com
