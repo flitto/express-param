@@ -104,14 +104,11 @@ app.get('/path/:id/', function(req, res, next) {
 
   if (req.checkParamErr(options)) return next(options);
 
-  //options values is below.
-  /*
-  {
-    id: '10',
-    count: 10
-    order: 'desc'
-  }
-  */
+  console.log(options);
+  { id: '10',
+    count: 10,
+    order: 'desc' }
+
   return res.send(options);
 });
 ```
@@ -160,6 +157,7 @@ var addOnOpt = {
     keyName: 'headers.x-forwarded-for'
   }
 };
+
 app.use(fetcher({
   'ipaddr': 'ip'
 }, addOnOpt));
@@ -167,18 +165,11 @@ app.use(fetcher({
 ////// ....
 
 console.log(req.param('x-fetcher-geoinfo'))
-//// output
-{
-  country:
-  {
-    range: [ 3479299040, 3479299071 ],
-    country: 'US',
-    region: 'CA',
-    city: 'San Francisco',
-    ll: [37.7484, -122.4156]
-  }
-}  
-///
+{ range: [ 3479299040, 3479299071 ],
+  country: 'US',
+  region: 'CA',
+  city: 'San Francisco',
+  ll: [37.7484, -122.4156] }  
 ```
 
 - **fetch detail imsi information by mnc, mcc code**
@@ -199,7 +190,6 @@ app.use(fetcher({
 // url maybe hostname/api?mnc=11&mcc=450. if only exist mcc then results array length may be greater than 1.
 
 console.log(req.param('x-imsi'))
-//// output
 [{
   country_name: 'South Korea',
   country_code: 'KR',
@@ -210,7 +200,6 @@ console.log(req.param('x-imsi'))
   status: 'Operational',
   bands: 'UMTS 2100'
 }]
-///
 ```    
 
 ## Contributing
