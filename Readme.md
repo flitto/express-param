@@ -5,6 +5,33 @@ Express.js request parameters parsing middleware
 [![Build Status](https://travis-ci.org/flitto/express-param.svg?branch=master)](https://travis-ci.org/flitto/express-param)
 <span class="badge-npmversion"><a href="https://npmjs.org/package/express-param" title="View this project on NPM"><img src="https://img.shields.io/npm/v/express-param.svg" alt="NPM version" /></a></span>
 
+## Changes from 0.7.5
+### Breaking Changes
+- Change `geoip` to `geoip-lite`
+  - Change returning values of geographic information.
+  - Before:
+  ```js
+    {
+      country: {
+        country_name: 'United States',
+        country_code: 'US',
+        country_code3: 'USA',
+        continent_code: 'NA'
+      }
+    }
+  ```
+
+  - After:
+  ```js
+    {
+      range: [ 3479299040, 3479299071 ],
+      country: 'US',
+      region: 'CA',
+      city: 'San Francisco',
+      ll: [37.7484, -122.4156]
+    }
+  ```
+
 ## About
 
 You can reduce amount of code. It can remove redundant code and generate high readability.
@@ -72,7 +99,7 @@ I was inspired by Spring Framework and Flask.
 ## Example
 
 Here is a simple example.
-   
+
 ```js
 var express = require('express');
 var fetcher = require('express-param');
@@ -104,21 +131,20 @@ app.get('/path/:id/', function(req, res, next) {
 
   if (req.checkParamErr(options)) return next(options);
 
-  //options values is below.
-  /*
+  console.log(options);
   {
     id: '10',
-    count: 10
+    count: 10,
     order: 'desc'
   }
-  */
+
   return res.send(options);
 });
 ```
 
 ## Another example
 
-Custom request key name belong to req property of express 
+Custom request key name belong to req property of express
 
 ```js
 var express = require('express');
@@ -153,38 +179,35 @@ app.get('/path', function(req, res, next) {
 - **fetch geographic information**
 
   It can fetch country information from remote ip address!
-   
+
 ```js
 var addOnOpt = {
   geoip: {
     keyName: 'headers.x-forwarded-for'
   }
 };
+
 app.use(fetcher({
   'ipaddr': 'ip'
 }, addOnOpt));
 
 ////// ....
 
-console.log(req.param('x-fetcher-geoinfo'))
-//// output
+console.log(req.param('x-fetcher-geoinfo'));
 {
-  country:
-  {
-    country_name: 'United States',
-    country_code: 'US',
-    country_code3: 'USA',
-    continent_code: 'NA'
-  } 
-}  
-///
+  range: [ 3479299040, 3479299071 ],
+  country: 'US',
+  region: 'CA',
+  city: 'San Francisco',
+  ll: [37.7484, -122.4156]
+}
 ```
 
 - **fetch detail imsi information by mnc, mcc code**
 
   It can generate detail imsi(country, operator...) information by mcc, mnc code!
-   
-    
+
+
 ```js
 var addOnOpt = {
   imsi: true
@@ -198,7 +221,6 @@ app.use(fetcher({
 // url maybe hostname/api?mnc=11&mcc=450. if only exist mcc then results array length may be greater than 1.
 
 console.log(req.param('x-imsi'))
-//// output
 [{
   country_name: 'South Korea',
   country_code: 'KR',
@@ -209,7 +231,6 @@ console.log(req.param('x-imsi'))
   status: 'Operational',
   bands: 'UMTS 2100'
 }]
-///
 ```    
 
 ## Contributing
@@ -224,5 +245,5 @@ MIT
 
 ---
 
-This product includes GeoLite data created by MaxMind, available from 
+This product includes GeoLite data created by MaxMind, available from
 http://www.maxmind.com
