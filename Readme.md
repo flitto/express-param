@@ -5,6 +5,33 @@ Express.js request parameters parsing middleware
 [![Build Status](https://travis-ci.org/flitto/express-param.svg?branch=master)](https://travis-ci.org/flitto/express-param)
 <span class="badge-npmversion"><a href="https://npmjs.org/package/express-param" title="View this project on NPM"><img src="https://img.shields.io/npm/v/express-param.svg" alt="NPM version" /></a></span>
 
+## Changes from 0.7.5
+### Breaking Changes
+- Change `geoip` to `geoip-lite`
+  - Change returning values of geographic information.
+  - Before:
+  ```js
+    {
+      country: {
+        country_name: 'United States',
+        country_code: 'US',
+        country_code3: 'USA',
+        continent_code: 'NA'
+      }
+    }
+  ```
+
+  - After:
+  ```js
+    {
+      range: [ 3479299040, 3479299071 ],
+      country: 'US',
+      region: 'CA',
+      city: 'San Francisco',
+      ll: [37.7484, -122.4156]
+    }
+  ```
+
 ## About
 
 You can reduce amount of code. It can remove redundant code and generate high readability.
@@ -105,9 +132,11 @@ app.get('/path/:id/', function(req, res, next) {
   if (req.checkParamErr(options)) return next(options);
 
   console.log(options);
-  { id: '10',
+  {
+    id: '10',
     count: 10,
-    order: 'desc' }
+    order: 'desc'
+  }
 
   return res.send(options);
 });
@@ -164,12 +193,14 @@ app.use(fetcher({
 
 ////// ....
 
-console.log(req.param('x-fetcher-geoinfo'))
-{ range: [ 3479299040, 3479299071 ],
+console.log(req.param('x-fetcher-geoinfo'));
+{
+  range: [ 3479299040, 3479299071 ],
   country: 'US',
   region: 'CA',
   city: 'San Francisco',
-  ll: [37.7484, -122.4156] }  
+  ll: [37.7484, -122.4156]
+}
 ```
 
 - **fetch detail imsi information by mnc, mcc code**
