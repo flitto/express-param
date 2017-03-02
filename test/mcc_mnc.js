@@ -1,7 +1,7 @@
 "use strict";
 
 var expresss = require('express')
-  , _ = require('underscore')
+  , _ = require('lodash/core')
   , request = require('supertest')
   , imsiList = require('../dat/mcc_mnc.json')
   , jsonDiff = require('json-diff').diff
@@ -39,7 +39,7 @@ describe('It can ', function() {
       options = req.fetchParameter(required);
       if (req.checkParamErr(options)) return next(options);
 
-      var imsi = req.headers['x-flt-imsi'];
+      var imsi = req.headers['x-fetcher-imsi'];
 
       if (jsonDiff(imsi, expectedList)) {
         throw new Error('Not match imsi info!');
@@ -65,7 +65,7 @@ describe('It can ', function() {
       expectedList = _.filter(imsiList, function(el) {
         return (el.mcc == mcc && el.mnc == mnc);
       });
-      var imsi = req.headers['x-flt-imsi'];
+      var imsi = req.headers['x-fetcher-imsi'];
 
       if (jsonDiff(imsi, expectedList)) {
         throw new Error('Not match imsi info!');
@@ -77,7 +77,5 @@ describe('It can ', function() {
     request(app)
       .get('/required?' + queryString)
       .expect(200, done);
-
   });
-
 });
