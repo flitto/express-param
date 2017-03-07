@@ -19,7 +19,7 @@ module.exports = function(option, addOn) {
     req.checkParamErr = checkErr.checkParamErr;
 
     if (addOn) {
-      if (addOn.geoip) req.headers['x-flt-geoinfo'] = geoInfo.fetch(req, addOn.geoip);
+      if (addOn.geoip) req.headers['x-fetcher-geoinfo'] = geoInfo.fetch(req, addOn);
       if (addOn.imsi) imsi.addImsi(req);
     }
 

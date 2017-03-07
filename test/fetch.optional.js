@@ -1,5 +1,6 @@
-var expresss = require('express')
-  , qs = require('querystring')
+'use strict';
+
+var express = require('express')
   , request = require('supertest')
   , fetcher = require('../');
 
@@ -7,138 +8,154 @@ describe('It can ', function() {
   var app;
 
   beforeEach(function(done) {
-    app = expresss();
+    app = express();
     app.use(fetcher());
     done();
   });
 
   it('fetch optional parameters', function(done) {
-    var opt
-      , queryString = 'id=1&count=20';
-
     app.get('/path', function(req, res, next) {
       var required = ['id']
-        , optional = ['count'];
+        , optional = ['count']
+        , options = req.fetchParameter(required, optional);
 
-      opt = req.fetchParameter(required, optional);
-      if (req.checkParamErr(opt)) return next(opt);
+      if (req.checkParamErr(options)) return next(options);
 
-      return res.send(opt);
+      return res.send(options);
     });
 
     request(app)
-      .get('/path?' + queryString)
-      .expect(200, qs.parse(queryString), done);
+      .get('/path')
+      .query('id=1')
+      .query('count=20')
+      .expect(200, {id: '1', count: '20'}, done);
   });
 
   it('fetch optional parameters with type', function(done) {
-    var opt
-      , queryString = 'count=10&order=desc';
-
     app.get('/path', function(req, res, next) {
       var required = []
-        , optional = ['number:count', 'order'];
+        , optional = ['int:count', 'order']
+        , options = req.fetchParameter(required, optional);
 
-      opt = req.fetchParameter(required, optional);
-      if (req.checkParamErr(opt)) return next(opt);
+      if (req.checkParamErr(options)) return next(options);
 
-      return res.send(opt);
+      return res.send(options);
     });
 
     request(app)
-      .get('/path?' + queryString)
-      .expect(200, qs.parse(queryString),done);
+      .get('/path')
+      .query('count=10')
+      .query('order=desc')
+      .expect(200, {count: 10, order: 'desc'},done);
   });
 
   it('fetch optional parameters with defaultValue', function(done) {
-    var opt
-      , queryString = 'count=10&order=desc';
-
     app.get('/path', function(req, res, next) {
       var required = []
-        , optional = ['number:count', 'order', 'val|=10'];
+        , optional = ['number:count', 'order', 'val|=10']
+        , options = req.fetchParameter(required, optional);
 
-      opt = req.fetchParameter(required, optional);
-      if (req.checkParamErr(opt)) return next(opt);
+      if (req.checkParamErr(options)) return next(options);
 
-      return res.send(opt);
+      return res.send(options);
     });
 
     request(app)
-      .get('/path?' + queryString)
-      .expect(200, qs.parse(queryString + '&val=10'),done);
+      .get('/path')
+      .query('count=10')
+      .query('order=asc')
+      .expect(200, {count: 10, order: 'asc', val: '10'},done);
   });
 
   it('fetch optional parameters with defaultValue and type', function(done) {
-    var opt
-      , queryString = 'count=10&order=desc';
-
     app.get('/path', function(req, res, next) {
       var required = []
-        , optional = ['number:count', 'order', 'number:val|=10'];
+        , optional = ['number:count', 'order', 'number:val|=10']
+        , options = req.fetchParameter(required, optional);
 
-      opt = req.fetchParameter(required, optional);
-      if (req.checkParamErr(opt)) return next(opt);
+      if (req.checkParamErr(options)) return next(options);
 
-      return res.send(opt);
+      return res.send(options);
     });
 
     request(app)
-      .get('/path?' + queryString)
-      .expect(200, qs.parse(queryString + '&val=10'), done)
+      .get('/path')
+      .query('count=10')
+      .query('order=desc')
+      .expect(200, {count: 10, order: 'desc', val: 10}, done)
   });
 
   it('fetch optional parameters input blank string', function(done) {
-    var opt
-      , queryString = 'id=';
-
     app.get('/path', function(req, res, next) {
       var required = []
-        , optional = ['number:id|=10'];
+        , optional = ['number:id|=10']
+        , options = req.fetchParameter(required, optional);
 
-      opt = req.fetchParameter(required, optional);
-      if (req.checkParamErr(opt)) return next(opt);
+      if (req.checkParamErr(options)) return next(options);
 
-      return res.send(opt);
+      return res.send(options);
     });
+
     request(app)
-      .get('/path?' + queryString)
-      .expect(200, qs.parse('id=10'), done);
+      .get('/path')
+      .query('id=')
+      .expect(200, {id: 10}, done);
   });
 
   it('fetch optional parameters input number 0', function(done) {
-    var opt
-      , queryString = 'id=0&type=number';
-
     app.get('/path', function(req, res, next) {
       var required = []
-        , optional = ['number:id|=10', 'string:type'];
+        , optional = ['number:id|=10', 'string:type']
+        , options = req.fetchParameter(required, optional);
 
-      opt = req.fetchParameter(required, optional);
-      if (req.checkParamErr(opt)) return next(opt);
+      if (req.checkParamErr(options)) return next(options);
 
-      return res.send(opt);
+      return res.send(options);
     });
+
     request(app)
-      .get('/path?' + queryString)
-      .expect(200, qs.parse(queryString), done);
+      .get('/path')
+      .query('id=0')
+      .query('type=number')
+      .expect(200, {id: 0, type: 'number'}, done);
   });
 
   it('fetch optional parameters blank string', function(done) {
-    var opt
-      , queryString = 'id=0&type=';
-
     app.get('/path', function(req, res, next) {
       var required = []
+        , optional = ['number:id|=10', 'string:type']
+        , options = req.fetchParameter(required, optional);
+
+      if (req.checkParamErr(options)) return next(options);
+
+      return res.send(options);
+    });
+
+    request(app)
+      .get('/path')
+      .query('id=0')
+      .query('type=')
+      .expect(200, {id: 0, type: ''}, done);
+  });
+
+  it('fetch optional parameters with multiple values', function(done) {
+    app.get('/path', function(req, res, next) {
+      var required = ['string:name']
         , optional = ['number:id|=10', 'string:type'];
 
-      opt = req.fetchParameter(required, optional);
-      if (req.checkParamErr(opt)) return next(opt);
+      var options = req.fetchParameter(required, optional);
+      if (req.checkParamErr(options)) return next(options);
 
-      return res.send(opt);
+      return res.send(options);
     });
+
     request(app)
-      .get('/path?' + queryString)
-      .expect(200, qs.parse(queryString), done);
+      .get('/path')
+      .query('id=1')
+      .query('type=number')
+      .query('id=2')
+      .query('name=first')
+      .query('name=second')
+      .expect(200, {name: 'second', id: 2, type: 'number'}, done);
   });
 });

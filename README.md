@@ -5,32 +5,6 @@ Express.js request parameters parsing middleware
 [![Build Status](https://travis-ci.org/flitto/express-param.svg?branch=master)](https://travis-ci.org/flitto/express-param)
 <span class="badge-npmversion"><a href="https://npmjs.org/package/express-param" title="View this project on NPM"><img src="https://img.shields.io/npm/v/express-param.svg" alt="NPM version" /></a></span>
 
-## Changes from 0.7.5
-### Breaking Changes
-- Change `geoip` to `geoip-lite`
-  - Change returning values of geographic information.
-  - Before:
-  ```js
-    {
-      country: {
-        country_name: 'United States',
-        country_code: 'US',
-        country_code3: 'USA',
-        continent_code: 'NA'
-      }
-    }
-  ```
-
-  - After:
-  ```js
-    {
-      range: [ 3479299040, 3479299071 ],
-      country: 'US',
-      region: 'CA',
-      city: 'San Francisco',
-      ll: [37.7484, -122.4156]
-    }
-  ```
 
 ## About
 
@@ -44,7 +18,7 @@ See below.
 function route(req, res, next) {
   var id = req.params.id
     , count = req.param('count') ? parseInt(req.param('count'), 10) : 10
-    , odrer = req.param('order')
+    , order = req.param('order')
     , type = req.param('type')
     , name = req.param('name')
     , since = req.param('since')
@@ -65,7 +39,7 @@ function route(req, res, next) {
 ```js
 function route(req, res, next) {
   var requiredParams = ['{id}', 'name', 'res_id']
-    , optionalParams = ['number:count|=10', 'order|=desc', 'type|=integer', 'since', 'from']
+    , optionalParams = ['int:id', 'float:avg', 'number:count|=10', 'order|=desc', 'type|=integer', 'since', 'from']
     , options;
 
   options = req.fetchParamter(requiredParams, optionalParams);
@@ -76,24 +50,50 @@ function route(req, res, next) {
 }
 ```
 
-## parameter syntax
+## Parameter syntax
 
 I was inspired by Spring Framework and Flask.
-- required parameter
-	- Array
-    - [element1, element2, element3, ...]
-    - type:{parameter_name}
-    	- type: type is optional(default string). number or string. return variable with type.
-        - {parameter_name}: {} is optional. but parameter name is required. if it include {}, it means that this is path variable
-        - ex) ['number:{id1}], 'string:id2', 'id3']
-- optional parameter
-	- Array
-    - [element1, element2, element3, ...]
-    - type:parameter_name|=default_value
-    	- type: type is optional(default string). number or string. return variable with type.
-        - parameter_name: required.
-        - default_value: optional. if request object do not have specified parameter then assign this default value.
-        - ex) ['number:count', 'order', 'string:option1|=Y']
+
+#### required parameter : Array
+- [element1, element2, element3, ...]
+- `type:{parameter_name}`
+- type:
+  - type is optional(default string). number(int, float) or string. return variable with type.
+  - {parameter_name}: {} is optional. but parameter name is required. if it include {}, it means that this is path variable
+  ```js
+  ['number:{id}', 'string:username', 'address']
+  ```
+
+
+#### optional parameter : Array
+- [element1, element2, element3, ...]
+- `type:parameter_name|=default_value`
+- type:
+  - type is optional(default string). number(int, float) or string. return variable with type.
+  - parameter_name: required.
+  - default_value: optional. if request object do not have specified parameter then assign this default value.
+
+  ```js
+  ['int:count', 'order', 'string:option1|=Y']
+  ```
+
+#### parameter with multiple values
+
+Selects the last parameter value for shield against HTTP pollution attacks.
+
+```js
+GET /path?id=1&type=number&id=2&name=first&name=second
+
+{id: 2, type: 'number', name: 'second'}
+```
+
+If you want to select multiple values from the parameter, use string type after separating the values with commas.
+
+```js
+GET /path?id=1,2&type=number&name=first,second
+
+{id: '1,2', type: 'number', name: 'first,second'}
+```
 
 
 ## Example
@@ -174,34 +174,41 @@ app.get('/path', function(req, res, next) {
 
   fetch parameters that are required and optional
 
+
 ## Add ON
 
 - **fetch geographic information**
 
   It can fetch country information from remote ip address!
 
-```js
-var addOnOpt = {
-  geoip: {
-    keyName: 'headers.x-forwarded-for'
+  ```js
+  var addOnOpt = {
+    geoip: {
+    	keyName: 'headers.x-forwarded-for'
+    }
+  };
+  app.use(fetcher({
+    'ipaddr': 'ip',
+    'geo-info': 'headers.x-fetcher-geoinfo',
+    'access-country': true
+  }, addOnOpt));
+
+  ////// ....
+
+  console.log(req.headers['x-fetcher-geoinfo']);
+  // or console.log(options['geo-info']);
+  {
+    range: [ 3479299040, 3479299071 ],
+    country: 'US',
+    region: 'CA',
+    city: 'San Francisco',
+    ll: [37.7484, -122.4156]
   }
-};
 
-app.use(fetcher({
-  'ipaddr': 'ip'
-}, addOnOpt));
+  console.log(options['access-country']);
+  'US'
 
-////// ....
-
-console.log(req.param('x-fetcher-geoinfo'));
-{
-  range: [ 3479299040, 3479299071 ],
-  country: 'US',
-  region: 'CA',
-  city: 'San Francisco',
-  ll: [37.7484, -122.4156]
-}
-```
+  ```
 
 - **fetch detail imsi information by mnc, mcc code**
 
@@ -213,14 +220,16 @@ var addOnOpt = {
   imsi: true
 };
 app.use(fetcher({
-  'ipaddr': 'ip'
+  'ipaddr': 'ip',
+  'access-country': true
 }, addOnOpt));
 
 ////// ....
 
-// url maybe hostname/api?mnc=11&mcc=450. if only exist mcc then results array length may be greater than 1.
+// url maybe hostname/api?mnc=11&mcc=450.
+// if only exist mcc then results array length may be greater than 1.
 
-console.log(req.param('x-imsi'))
+console.log(req.headers['x-fetcher-imsi'])
 [{
   country_name: 'South Korea',
   country_code: 'KR',
@@ -231,7 +240,10 @@ console.log(req.param('x-imsi'))
   status: 'Operational',
   bands: 'UMTS 2100'
 }]
-```    
+
+console.log(options['access-country']);
+'KR'
+```
 
 ## Contributing
 
