@@ -1,6 +1,6 @@
 {
   "name": "express-param",
-  "version": "0.8.1",
+  "version": "1.0.0",
   "description": "fetch expressjs params and check validation",
   "main": "index.js",
   "author": "Flitto Inc.",
