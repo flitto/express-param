@@ -85,6 +85,9 @@ describe('It can ', function() {
     request(app)
       .get('/')
       .set('x-forwarded-for', '106.249.137.139')
+      .expect(function(res) {
+        if (res.body.ipaddr.indexOf('::ffff:') < 0) res.body.ipaddr = '::ffff:' + res.body.ipaddr;
+      })
       .expect(200, function(err, res) {
         expect(err).to.not.exist;
         expect(res.body).to.deep.equal({ipaddr: '::ffff:127.0.0.1', 'access-country': 'KR'});
