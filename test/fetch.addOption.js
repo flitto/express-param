@@ -34,10 +34,13 @@ describe('It can ', function() {
       .get('/required')
       .query('id=1&type=int')
       .expect(function(res) {
-        if (res.body.ipaddr.indexOf('::ffff:') < 0)
-          res.body.ipaddr = '::ffff:' + res.body.ipaddr;
+        if (res.body.ipaddr.indexOf('::ffff:') < 0) res.body.ipaddr = '::ffff:' + res.body.ipaddr;
       })
-      .expect(200, {id: '1', type: 'int', ipaddr: '::ffff:127.0.0.1'}, done);
+      .expect(200, function(err, res) {
+        expect(err).to.not.exist;
+        expect(res.body).to.deep.equal({id: '1', type: 'int', ipaddr: '::ffff:127.0.0.1'});
+        done();
+      });
   });
 
   it('fetch geographic information from remote ip address', function(done) {
@@ -74,15 +77,18 @@ describe('It can ', function() {
 
     app.use(function(req, res, next) {
       var options = req.fetchParameter([], ['ipaddr', 'access-country']);
-
       if (req.checkParamErr(options)) return next(options);
 
-      return res.send(options['access-country']);
+      return res.send(options);
     });
 
     request(app)
       .get('/')
       .set('x-forwarded-for', '106.249.137.139')
-      .expect(200, 'KR', done);
+      .expect(200, function(err, res) {
+        expect(err).to.not.exist;
+        expect(res.body).to.deep.equal({ipaddr: '::ffff:127.0.0.1', 'access-country': 'KR'});
+        done();
+      });
   });
 });

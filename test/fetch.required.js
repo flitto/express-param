@@ -3,6 +3,8 @@
 var express = require('express')
   , bodyparser = require('body-parser')
   , request = require('supertest')
+  , _ = require('lodash')
+  , expect = require('chai').expect
   , fetcher = require('../');
 
 describe('It can ', function() {
@@ -84,12 +86,16 @@ describe('It can ', function() {
     request(app)
       .get('/path/10')
       .query('type=number')
-      .expect(200, {id: 10,type: 'number'}, done);
+      .expect(200, function(err, res) {
+        expect(err).to.not.exist;
+        expect(res.body).to.deep.equal({id: 10, type: 'number'});
+        done();
+      });
   });
 
   it('fetch required Parameters with path underline variable', function(done) {
     app.get('/path/:cut_tr_id/:lang_id', function(req, res, next) {
-      var required = ['number:{cut_tr_id}', 'int:{lang_id}',  'type']
+      var required = ['number:{cut_tr_id}', 'int:{lang_id}', 'type']
         , options = req.fetchParameter(required);
 
       if (req.checkParamErr(options)) return next(options);
@@ -100,7 +106,12 @@ describe('It can ', function() {
     request(app)
       .get('/path/11/20')
       .query('type=int')
-      .expect(200, {cut_tr_id: 11, lang_id: 20, type: 'int'}, done);
+      .expect(200, function(err, res) {
+        expect(err).to.not.exist;
+        expect(res.body).to.deep.equal({cut_tr_id: 11, lang_id: 20, type: 'int'});
+        expect(_.isSafeInteger(res.body.lang_id)).to.be.true;
+        done();
+      });
   });
 
   it('fetch required parameters with type', function(done) {
@@ -117,12 +128,16 @@ describe('It can ', function() {
       .get('/path')
       .query('id=10')
       .query('type=number')
-      .expect(200, {id: 10, type: 'number'}, done);
+      .expect(200, function(err, res) {
+        expect(err).to.not.exist;
+        expect(res.body).to.deep.equal({id: 10, type: 'number'});
+        done();
+      });
   });
 
   it('fetch float parameter with type number', function(done) {
     app.get('/path', function(req, res, next) {
-      var required = ['number:id', 'string:type']
+      var required = ['number:id', 'string:type', 'number:val']
         , options = req.fetchParameter(required);
 
       if (req.checkParamErr(options)) return next(options);
@@ -134,12 +149,17 @@ describe('It can ', function() {
       .get('/path')
       .query('id=10.1')
       .query('type=number')
-      .expect(200, {id: 10.1, type: 'number'}, done);
+      .query('val=9.999999999999999')
+      .expect(200, function(err, res) {
+        expect(err).to.not.exist;
+        expect(res.body).to.deep.equal({id: 10.1, type: 'number', val: 9.999999999999999});
+        done();
+      });
   });
 
-  it('fetch float parameter with type number', function(done) {
+  it('fetch float parameter with type float', function(done) {
     app.get('/path', function(req, res, next) {
-      var required = ['number:id', 'string:type']
+      var required = ['number:id', 'string:type', 'float:val']
         , options = req.fetchParameter(required);
 
       if (req.checkParamErr(options)) return next(options);
@@ -151,7 +171,12 @@ describe('It can ', function() {
       .get('/path')
       .query('id=9.999999999999999999999999')
       .query('type=number')
-      .expect(200, {id: 10, type: 'number'}, done);
+      .query('val=9.999999999999999')
+      .expect(200, function(err, res) {
+        expect(err).to.not.exist;
+        expect(res.body).to.deep.equal({id: 10, type: 'number', val: 9.999999999999999});
+        done();
+      });
   });
 
   it('fetch required parameter with type int(Safe Integer)', function(done) {
@@ -168,6 +193,11 @@ describe('It can ', function() {
       .get('/path')
       .query('id=99')
       .query('type=int')
-      .expect(200, {id: 99, type:'int'}, done);
+      .expect(200, function(err, res) {
+        expect(err).to.not.exist;
+        expect(res.body).to.deep.equal({id: 99, type: 'int'});
+        expect(_.isSafeInteger(res.body.id)).to.be.true;
+        done();
+      });
   });
 });
