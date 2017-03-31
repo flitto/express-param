@@ -108,6 +108,28 @@ describe('It can ', function() {
       });
   });
 
+  it('fetch optional parameters with wrong type', function(done) {
+    app.get('/path', function(req, res, next) {
+      var required = []
+        , optional = ['number:count', 'order', 'number:val|=10']
+        , options = req.fetchParameter(required, optional);
+
+      if (req.checkParamErr(options)) return next(options);
+
+      return res.send(options);
+    });
+
+    request(app)
+      .get('/path')
+      .query('count=10')
+      .query('order=desc')
+      .expect(200, function(err, res) {
+        expect(err).to.not.exist;
+        expect(res.body).to.deep.equal({count: 10, order: 'desc', val: 10});
+        done();
+      });
+  });
+
   it('fetch optional parameters input blank string', function(done) {
     app.get('/path', function(req, res, next) {
       var required = []
