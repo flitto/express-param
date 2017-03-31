@@ -1,6 +1,6 @@
 # express-param
 
-Express.js request parameters parsing middleware
+Middleware for parsing Express.js request parameters
 
 [![Build Status](https://travis-ci.org/flitto/express-param.svg?branch=master)](https://travis-ci.org/flitto/express-param)
 <span class="badge-npmversion"><a href="https://npmjs.org/package/express-param" title="View this project on NPM"><img src="https://img.shields.io/npm/v/express-param.svg" alt="NPM version" /></a></span>
@@ -8,12 +8,9 @@ Express.js request parameters parsing middleware
 
 ## About
 
-You can reduce amount of code. It can remove redundant code and generate high readability.
+You can use this library to remove redundancies in your code and to improve readability.
 
-See below.
-
-- may be existing
-
+For example, you may have something like
 ```js
 function route(req, res, next) {
   var id = req.params.id
@@ -34,8 +31,7 @@ function route(req, res, next) {
 }
 ```
 
-- after using this
-
+Using this library, the code above is reduced to
 ```js
 function route(req, res, next) {
   var requiredParams = ['{id}', 'name', 'res_id']
@@ -52,34 +48,33 @@ function route(req, res, next) {
 
 ## Parameter syntax
 
-I was inspired by Spring Framework and Flask.
+Our parameter syntax was inspired by Spring Framework and Flask.
 
-#### required parameter : Array
+#### Required parameter : Array
 - [element1, element2, element3, ...]
 - `type:{parameter_name}`
-- type:
-  - type is optional(default string). number(int, float) or string. return variable with type.
-  - {parameter_name}: {} is optional. but parameter name is required. if it include {}, it means that this is path variable
+  - `type` is optional; it defaults to string. `type` can be an `int`, `float`, `number` (for backwards compatibility), or `string`.
+  - Curly braces in `{parameter_name}` are optional but `parameter_name` is required. Put {} around `parameter_name` to indicate that it is a path variable.
+  - Example:
   ```js
   ['number:{id}', 'string:username', 'address']
   ```
 
 
-#### optional parameter : Array
+#### Optional parameter : Array
 - [element1, element2, element3, ...]
 - `type:parameter_name|=default_value`
-- type:
-  - type is optional(default string). number(int, float) or string. return variable with type.
-  - parameter_name: required.
-  - default_value: optional. if request object do not have specified parameter then assign this default value.
-
+  - `type` is optional; it defaults to string. `type` can be an `int`, `float`, `number` (for backwards compatibility), or `string`.
+  - `parameter_name` is required.
+  - `default_value` is optional. If the request object does not have any specified parameter then assign this default value.
+  - Example:
   ```js
   ['int:count', 'order', 'string:option1|=Y']
   ```
 
-#### parameter with multiple values
+#### Parameter with multiple values
 
-Selects the last parameter value for shield against HTTP pollution attacks.
+Selects the last parameter value for protection from HTTP pollution attacks.
 
 ```js
 GET /path?id=1&type=number&id=2&name=first&name=second
@@ -117,7 +112,7 @@ app.get('/path', function(req, res, next) {
 });
 ```
 
-Here is another example with express-param syntax
+Here is another example with express-param syntax:
 
 ```js
 var fetcher = require('express-param');
@@ -144,7 +139,7 @@ app.get('/path/:id/', function(req, res, next) {
 
 ## Another example
 
-Custom request key name belong to req property of express
+Custom request key name belongs to request property of express:
 
 ```js
 var express = require('express');
@@ -172,14 +167,14 @@ app.get('/path', function(req, res, next) {
 
 - **fetchParameter(required[, optional])**
 
-  fetch parameters that are required and optional
+  Fetch required and optional parameters.
 
 
 ## Add ON
 
 - **fetch geographic information**
 
-  It can fetch country information from remote ip address!
+  Fetch country information from remote IP addresses!
 
   ```js
   var addOnOpt = {
@@ -226,8 +221,8 @@ app.use(fetcher({
 
 ////// ....
 
-// url maybe hostname/api?mnc=11&mcc=450.
-// if only exist mcc then results array length may be greater than 1.
+// The URL may be hostname/api?mnc=11&mcc=450.
+// If only mcc is present then the length of the results array may be greater than 1.
 
 console.log(req.headers['x-fetcher-imsi'])
 [{
@@ -245,7 +240,7 @@ console.log(options['access-country']);
 'KR'
 ```
 
-## Contributing
+## Make contributions
 
 We'd love your contributions! Please send us Pull Requests. Also, read the [contribution guidelines](https://github.com/SungYeolWoo/express-param/blob/master/Contribution.md).
 
