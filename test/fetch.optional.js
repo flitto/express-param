@@ -1,6 +1,7 @@
 'use strict';
 
 var express = require('express')
+  , bodyparser = require('body-parser')
   , request = require('supertest')
   , fetcher = require('../');
 
@@ -157,5 +158,29 @@ describe('It can ', function() {
       .query('name=first')
       .query('name=second')
       .expect(200, {name: 'second', id: 2, type: 'number'}, done);
+  });
+
+  it('fetch optional parameters with multiple values', function(done) {
+    var postData = {id: [1, 2], type: 'int'};
+
+    app.use(bodyparser.json());
+    app.use(bodyparser.urlencoded({
+      extended: true
+    }));
+
+    app.use(function(req, res, next) {
+      var optional  = ['id', 'type']
+        , options = req.fetchParameter([], optional);
+      if (req.checkParamErr(options)) return next(options);
+
+      return res.send(options);
+    });
+
+    request(app)
+      .post('/multiple')
+      .query('id=abc')
+      .query('type=string')
+      .send(postData)
+      .expect(200, postData, done);
   });
 });
