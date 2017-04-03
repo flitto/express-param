@@ -200,4 +200,28 @@ describe('It can ', function() {
         done();
       });
   });
+
+  it('fetch required parameters with multiple values', function(done) {
+    var postData = {id: [1, 2], type: 'int'};
+
+    app.use(bodyparser.json());
+    app.use(bodyparser.urlencoded({
+      extended: true
+    }));
+
+    app.use(function(req, res, next) {
+      var required = ['id', 'type']
+        , options = req.fetchParameter(required);
+      if (req.checkParamErr(options)) return next(options);
+
+      return res.send(options);
+    });
+
+    request(app)
+      .post('/multiple')
+      .query('id=abc')
+      .query('type=string')
+      .send(postData)
+      .expect(200, postData, done);
+  });
 });
