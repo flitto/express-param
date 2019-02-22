@@ -69,6 +69,26 @@ describe('It can ', function() {
       .expect(200, done);
   });
 
+  it('no error without mcc', function(done) {
+    app.use(function(req, res, next) {
+      const required = ['ipaddr'];
+      const options = req.fetchParameter(required);
+
+      if (req.checkParamErr(options)) return next(options);
+
+      const imsi = req.headers['x-fetcher-imsi'];
+      if (!_.isEqual(imsi, [])) {
+        throw new Error('Should be [] without mcc parameter!');
+      }
+      return res.send(options);
+    });
+
+    request(app)
+      .get('/required')
+      .query('mcc=')
+      .expect(200, done);
+  });
+
   it('fetch access country from remote ip address after apply "imsi" additional options', function(done) {
     const extraOption = {'access-country': true};
     app.use(fetcher(extraOption));
