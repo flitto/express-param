@@ -1,6 +1,6 @@
 {
   "name": "express-param",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "fetch expressjs params and check validation",
   "main": "index.js",
   "author": "Flitto Inc.",
@@ -22,7 +22,7 @@
   "dependencies": {
     "geoip-lite": "^1.3.6",
     "lodash": "^4.17.11",
-    "underscore": "^1.9.1"
+    "mcc-mnc-list": "^1.0.81"
   },
   "devDependencies": {
     "body-parser": "^1.18.3",

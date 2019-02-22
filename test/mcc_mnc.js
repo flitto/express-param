@@ -1,16 +1,14 @@
-'use strict';
-
-var express = require('express')
-  , _ = require('lodash/core')
-  , request = require('supertest')
-  , imsiList = require('../dat/mcc_mnc.json')
-  , fetcher = require('../');
+const express = require('express');
+const _ = require('lodash/core');
+const request = require('supertest');
+const imsiList = require('mcc-mnc-list').all()
+const fetcher = require('../');
 
 describe('It can ', function() {
-  var app
-    , mcc = 450
-    , mnc = 11
-    , expectedList;
+  let app;
+  const mcc = '450';
+  const mnc = '11';
+  let expectedList;
 
   beforeEach(function (done) {
     app = express();
@@ -22,20 +20,18 @@ describe('It can ', function() {
       ipaddr: 'ip'
     }, {imsi: true}));
 
-    expectedList = _.filter(imsiList, function(el) {
-      return el.mcc == mcc;
-    });
+    expectedList = imsiList.filter((el) => el.mcc === mcc);
     done();
   });
 
   it('fetch imsi info by mcc', function(done) {
     app.use(function(req, res, next) {
-      var required = ['ipaddr']
-        , options = req.fetchParameter(required);
+      const required = ['ipaddr'];
+      const options = req.fetchParameter(required);
 
       if (req.checkParamErr(options)) return next(options);
 
-      var imsi = req.headers['x-fetcher-imsi'];
+      const imsi = req.headers['x-fetcher-imsi'];
 
       if (!_.isEqual(imsi, expectedList)) {
         throw new Error('Not match imsi info!');
@@ -51,15 +47,13 @@ describe('It can ', function() {
 
   it('fetch imsi info by mcc and mnc', function(done) {
     app.use(function(req, res, next) {
-      var required = ['ipaddr']
-        , options = req.fetchParameter(required);
+      const required = ['ipaddr']
+      const options = req.fetchParameter(required);
 
       if (req.checkParamErr(options)) return next(options);
 
-      expectedList = _.filter(imsiList, function(el) {
-        return (el.mcc == mcc && el.mnc == mnc);
-      });
-      var imsi = req.headers['x-fetcher-imsi'];
+      expectedList = imsiList.filter((el) => (el.mcc === mcc && el.mnc === mnc));
+      const imsi = req.headers['x-fetcher-imsi'];
 
       if (!_.isEqual(imsi, expectedList)) {
         throw new Error('Not match imsi info!');
@@ -76,11 +70,11 @@ describe('It can ', function() {
   });
 
   it('fetch access country from remote ip address after apply "imsi" additional options', function(done) {
-    var extraOption = {'access-country': true};
+    const extraOption = {'access-country': true};
     app.use(fetcher(extraOption));
 
-    app.use(function(req, res, next) {
-      var options = req.fetchParameter([], ['ipaddr', 'access-country']);
+    app.use((req, res, next) => {
+      const options = req.fetchParameter([], ['ipaddr', 'access-country']);
       if (req.checkParamErr(options)) return next(options);
 
       return res.send(options['access-country']);
