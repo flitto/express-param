@@ -35,7 +35,7 @@ Using this library, the code above is reduced to
 ```js
 function route(req, res, next) {
   var requiredParams = ['{id}', 'name', 'res_id']
-    , optionalParams = ['int:id', 'float:avg', 'number:count|=10', 'order|=desc', 'type|=integer', 'since', 'from']
+    , optionalParams = ['int:id', 'int32:sum', 'uint32:max', 'float:avg', 'number:count|=10', 'order|=desc', 'type|=integer', 'since', 'from']
     , options;
 
   options = req.fetchParamter(requiredParams, optionalParams);
@@ -53,7 +53,7 @@ Our parameter syntax was inspired by Spring Framework and Flask.
 #### Required parameter : Array
 - [element1, element2, element3, ...]
 - `type:{parameter_name}`
-  - `type` is optional; it defaults to string. `type` can be an `int`, `float`, `number` (for backwards compatibility), or `string`.
+  - `type` is optional; it defaults to string. `type` can be an `int`, `int32`, `uint32`, `float`, `number` (for backwards compatibility), or `string`.
   - Curly braces in `{parameter_name}` are optional but `parameter_name` is required. Put {} around `parameter_name` to indicate that it is a path variable.
   - Example:
   ```js
@@ -64,7 +64,7 @@ Our parameter syntax was inspired by Spring Framework and Flask.
 #### Optional parameter : Array
 - [element1, element2, element3, ...]
 - `type:parameter_name|=default_value`
-  - `type` is optional; it defaults to string. `type` can be an `int`, `float`, `number` (for backwards compatibility), or `string`.
+  - `type` is optional; it defaults to string. `type` can be an `int`, `int32`, `unit32`, `float`, `number` (for backwards compatibility), or `string`.
   - `parameter_name` is required.
   - `default_value` is optional. If the request object does not have any specified parameter then assign this default value.
   - Example:
