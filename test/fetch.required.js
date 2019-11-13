@@ -201,6 +201,50 @@ describe('It can ', function() {
       });
   });
 
+  it('fetch required parameter with type int32(Safe Integer)', function(done) {
+    app.get('/path', function(req, res, next) {
+      var required = ['int32:id', 'string:type']
+        , options = req.fetchParameter(required);
+
+      if (req.checkParamErr(options)) return next(options);
+
+      return res.send(options);
+    });
+
+    request(app)
+      .get('/path')
+      .query('id=2147483647')
+      .query('type=int')
+      .expect(200, function(err, res) {
+        expect(err).to.not.exist;
+        expect(res.body).to.deep.equal({id: 2147483647, type: 'int'});
+        expect(_.isSafeInteger(res.body.id)).to.be.true;
+        done();
+      });
+  });
+
+  it('fetch required parameter with type int32(Safe Integer)', function(done) {
+    app.get('/path', function(req, res, next) {
+      var required = ['uint32:id', 'string:type']
+        , options = req.fetchParameter(required);
+
+      if (req.checkParamErr(options)) return next(options);
+
+      return res.send(options);
+    });
+
+    request(app)
+      .get('/path')
+      .query('id=4294967295')
+      .query('type=int')
+      .expect(200, function(err, res) {
+        expect(err).to.not.exist;
+        expect(res.body).to.deep.equal({id: 4294967295, type: 'int'});
+        expect(_.isSafeInteger(res.body.id)).to.be.true;
+        done();
+      });
+  });
+
   it('fetch required parameters with multiple values', function(done) {
     var postData = {id: [1, 2], type: 'int'};
 

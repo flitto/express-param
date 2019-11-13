@@ -129,4 +129,84 @@ describe('It can ', function() {
       .query({id: 10})
       .expect(400, 'The double is an unsupported type.', done);
   });
+
+  it('receive int32 type error code. (required param)', function(done) {
+    app.get('/path', function(req, res, next) {
+      var required = ['int32:id']
+        , options = req.fetchParameter(required);
+
+      if (req.checkParamErr(options)) return next(options);
+
+      return res.send(options);
+    });
+
+    app.use(function(err, req, res, next) {
+      return res.status(err.code).send(err.message);
+    });
+
+    request(app)
+      .get('/path')
+      .query({id: -21474836471})
+      .expect(400, 'The parameter value is over the int32 range', done);
+  })
+
+  it('receive int32 type error code. (optional param)', function(done) {
+    app.get('/path', function(req, res, next) {
+      var optional = ['int32:id']
+        , options = req.fetchParameter([], optional);
+
+      if (req.checkParamErr(options)) return next(options);
+
+      return res.send(options);
+    });
+
+    app.use(function(err, req, res, next) {
+      return res.status(err.code).send(err.message);
+    });
+
+    request(app)
+      .get('/path')
+      .query({id: -21474836471})
+      .expect(400, 'The parameter value is over the int32 range', done);
+  })
+
+  it('receive uint32 type error code. (required param)', function(done) {
+    app.get('/path', function(req, res, next) {
+      var required = ['uint32:id']
+        , options = req.fetchParameter(required);
+
+      if (req.checkParamErr(options)) return next(options);
+
+      return res.send(options);
+    });
+
+    app.use(function(err, req, res, next) {
+      return res.status(err.code).send(err.message);
+    });
+
+    request(app)
+      .get('/path')
+      .query({id: 21474836471})
+      .expect(400, 'The parameter value is over the uint32 range', done);
+  })
+
+  it('receive uint32 type error code. (optional param)', function(done) {
+    app.get('/path', function(req, res, next) {
+      var optional = ['uint32:id']
+        , options = req.fetchParameter([], optional);
+
+      if (req.checkParamErr(options)) return next(options);
+
+      return res.send(options);
+    });
+
+    app.use(function(err, req, res, next) {
+      return res.status(err.code).send(err.message);
+    });
+
+    request(app)
+      .get('/path')
+      .query({id: 21474836471})
+      .expect(400, 'The parameter value is over the uint32 range', done);
+  })
 });
