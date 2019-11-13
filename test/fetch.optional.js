@@ -41,7 +41,7 @@ describe('It can ', function() {
   it('fetch optional parameters with int and float type', function(done) {
     app.get('/path', function(req, res, next) {
       var required = []
-        , optional = ['int:count', 'order', 'float:val']
+        , optional = ['int:count', 'order', 'float:val', 'int32:sum', 'uint32:max']
         , options = req.fetchParameter(required, optional);
 
       if (req.checkParamErr(options)) return next(options);
@@ -54,9 +54,11 @@ describe('It can ', function() {
       .query('count=10')
       .query('order=desc')
       .query('val=30.3')
+      .query('sum=2147483647')
+      .query('max=4294967295')
       .expect(200, function(err, res) {
         expect(err).to.not.exist;
-        expect(res.body).to.deep.equal({count: 10, order: 'desc', val: 30.3});
+        expect(res.body).to.deep.equal({count: 10, order: 'desc', val: 30.3, sum: 2147483647, max: 4294967295});
         expect(_.isSafeInteger(res.body.count)).to.be.true;
         expect(res.body.val).to.not.be.a('string');
         expect(_.isSafeInteger(res.body.val)).to.not.be.true;
