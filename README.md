@@ -2,7 +2,7 @@
 
 Middleware for parsing Express.js request parameters
 
-[![Build Status](https://travis-ci.org/flitto/express-param.svg?branch=master)](https://travis-ci.org/flitto/express-param)
+[![Build Status](https://travis-ci.com/flitto/express-param.svg?branch=master)](https://travis-ci.com/flitto/express-param)
 <span class="badge-npmversion"><a href="https://npmjs.org/package/express-param" title="View this project on NPM"><img src="https://img.shields.io/npm/v/express-param.svg" alt="NPM version" /></a></span>
 
 
@@ -42,7 +42,7 @@ function route(req, res, next) {
 
   if (req.checkParamErr(options)) return next(options);
 
-	return res.send(options);
+  return res.send(options);
 }
 ```
 
@@ -179,7 +179,7 @@ app.get('/path', function(req, res, next) {
   ```js
   var addOnOpt = {
     geoip: {
-    	keyName: 'headers.x-forwarded-for'
+      keyName: 'headers.x-forwarded-for'
     }
   };
   app.use(fetcher({
