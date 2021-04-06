@@ -1,5 +1,5 @@
 const express = require('express');
-const _ = require('lodash/core');
+const isEqual = require('lodash/isEqual');
 const request = require('supertest');
 const imsiList = require('mcc-mnc-list').all()
 const fetcher = require('../');
@@ -33,7 +33,7 @@ describe('It can ', function() {
 
       const imsi = req.headers['x-fetcher-imsi'];
 
-      if (!_.isEqual(imsi, expectedList)) {
+      if (!isEqual(imsi, expectedList)) {
         throw new Error('Not match imsi info!');
       }
       return res.send(options);
@@ -55,7 +55,7 @@ describe('It can ', function() {
       expectedList = imsiList.filter((el) => (el.mcc === mcc && el.mnc === mnc));
       const imsi = req.headers['x-fetcher-imsi'];
 
-      if (!_.isEqual(imsi, expectedList)) {
+      if (!isEqual(imsi, expectedList)) {
         throw new Error('Not match imsi info!');
       }
 
@@ -77,7 +77,7 @@ describe('It can ', function() {
       if (req.checkParamErr(options)) return next(options);
 
       const imsi = req.headers['x-fetcher-imsi'];
-      if (!_.isEqual(imsi, [])) {
+      if (!isEqual(imsi, [])) {
         throw new Error('Should be [] without mcc parameter!');
       }
       return res.send(options);

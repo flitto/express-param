@@ -1,6 +1,6 @@
 {
   "name": "express-param",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "fetch expressjs params and check validation",
   "main": "index.js",
   "author": "Flitto Inc.",
@@ -21,19 +21,19 @@
   "license": "MIT",
   "dependencies": {
     "geoip-lite": "^1.4.2",
-    "lodash": "^4.17.19",
-    "mcc-mnc-list": "^1.1.2"
+    "lodash": "^4.17.21",
+    "mcc-mnc-list": "^1.1.6"
   },
   "devDependencies": {
     "body-parser": "^1.19.0",
-    "chai": "^4.2.0",
+    "chai": "^4.3.4",
     "express": "^4.17.1",
-    "mocha": "^7.2.0",
+    "mocha": "^8.3.2",
     "should": "^13.2.3",
-    "supertest": "^4.0.2"
+    "supertest": "^6.1.3"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=10"
   },
   "scripts": {
     "test": "make all",
