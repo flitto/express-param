@@ -33,7 +33,7 @@ describe('It can ', function() {
       .expect(200, {id: '1', type: 'int'}, done);
   });
 
-  it('fetch required Parameters', function(done) {
+  it('fetch required Parameters (POST)', function(done) {
     var postData = {id: 1, type: 'int'};
 
     app.use(bodyparser.json());
@@ -131,6 +131,29 @@ describe('It can ', function() {
       .expect(200, function(err, res) {
         expect(err).to.not.exist;
         expect(res.body).to.deep.equal({id: 10, type: 'number'});
+        done();
+      });
+  });
+
+  it('fetch required parameters with string type and unicode null character', function(done) {
+    var postData = {content: 'string with \u0000 unicode null character.'};
+
+    app.use(bodyparser.json());
+    app.post('/path', function(req, res, next) {
+      var required = ['string:content']
+        , options = req.fetchParameter(required);
+
+      if (req.checkParamErr(options)) return next(options);
+
+      return res.send(options);
+    });
+
+    request(app)
+      .post('/path')
+      .send(postData)
+      .expect(200, function(err, res) {
+        expect(err).to.not.exist;
+        expect(res.body).to.deep.equal({content: postData.content.replace(/\u0000/g, '')});
         done();
       });
   });
