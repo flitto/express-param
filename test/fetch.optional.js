@@ -67,6 +67,30 @@ describe('It can ', function() {
       });
   });
 
+  it('fetch optional parameters with string type and unicode null character', function(done) {
+    var postData = {content: 'string with \u0000 unicode null character.'};
+
+    app.use(bodyparser.json());
+    app.post('/path', function(req, res, next) {
+      var required = []
+        , optional = ['string:content']
+        , options = req.fetchParameter(required, optional);
+
+      if (req.checkParamErr(options)) return next(options);
+
+      return res.send(options);
+    });
+
+    request(app)
+      .post('/path')
+      .send(postData)
+      .expect(200, function(err, res) {
+        expect(err).to.not.exist;
+        expect(res.body).to.deep.equal({content: postData.content.replace(/\u0000/g, '')});
+        done();
+      });
+  });
+
   it('fetch optional parameters with defaultValue', function(done) {
     app.get('/path', function(req, res, next) {
       var required = []
