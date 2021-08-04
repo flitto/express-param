@@ -53,7 +53,8 @@ Our parameter syntax was inspired by Spring Framework and Flask.
 #### Required parameter : Array
 - [element1, element2, element3, ...]
 - `type:{parameter_name}`
-  - `type` is optional; it defaults to string. `type` can be an `int`, `int32`, `uint32`, `float`, `number` (for backwards compatibility), or `string`.
+  - `type` is optional; `type` can be an `int`, `int32`, `uint32`, `float`, `number` (for backwards compatibility), or `string`.
+  - if `type` is `string`, unicode null character `\u0000` is replaced by ''. (prevent some android keyboard problem.)
   - Curly braces in `{parameter_name}` are optional but `parameter_name` is required. Put {} around `parameter_name` to indicate that it is a path variable.
   - Example:
   ```js
@@ -64,7 +65,8 @@ Our parameter syntax was inspired by Spring Framework and Flask.
 #### Optional parameter : Array
 - [element1, element2, element3, ...]
 - `type:parameter_name|=default_value`
-  - `type` is optional; it defaults to string. `type` can be an `int`, `int32`, `unit32`, `float`, `number` (for backwards compatibility), or `string`.
+  - `type` is optional; `type` can be an `int`, `int32`, `unit32`, `float`, `number` (for backwards compatibility), or `string`.
+  - if `type` is `string`, unicode null character `\u0000` is replaced by ''.
   - `parameter_name` is required.
   - `default_value` is optional. If the request object does not have any specified parameter then assign this default value.
   - Example:
