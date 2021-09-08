@@ -34,7 +34,7 @@ describe('It can ', function() {
   });
 
   it('fetch required Parameters (POST)', function(done) {
-    var postData = {id: 1, type: 'int'};
+    var postData = {id: 1, type: 'int', zero: 0};
 
     app.use(bodyparser.json());
     app.use(bodyparser.urlencoded({
@@ -42,7 +42,7 @@ describe('It can ', function() {
     }));
 
     app.use(function(req, res, next) {
-      var required = ['id', 'type']
+      var required = ['id', 'type', 'zero']
         , options = req.fetchParameter(required);
       if (req.checkParamErr(options)) return next(options);
 
