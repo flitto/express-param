@@ -1,6 +1,6 @@
 {
   "name": "express-param",
-  "version": "1.6.2",
+  "version": "1.7.0",
   "description": "fetch expressjs params and check validation",
   "main": "index.js",
   "author": "Flitto Inc.",
@@ -20,23 +20,24 @@
   "homepage": "https://www.flitto.com/",
   "license": "MIT",
   "dependencies": {
-    "geoip-lite": "^1.4.2",
+    "geoip-lite": "^1.4.3",
     "lodash": "^4.17.21",
-    "mcc-mnc-list": "^1.1.7"
+    "mcc-mnc-list": "^1.1.8"
   },
   "devDependencies": {
-    "body-parser": "^1.19.0",
-    "chai": "^4.3.4",
-    "express": "^4.17.1",
-    "mocha": "^9.0.3",
+    "body-parser": "^1.19.1",
+    "chai": "^4.3.6",
+    "express": "^4.17.2",
+    "istanbul": "^0.4.5",
+    "mocha": "^9.2.0",
     "should": "^13.2.3",
-    "supertest": "^6.1.4"
+    "supertest": "^6.2.2"
   },
   "engines": {
     "node": ">=10"
   },
   "scripts": {
-    "test": "make all",
+    "test": "npm run test-cov",
     "test-ci": "mocha",
     "test-cov": "istanbul cover --hook-run-in-context node_modules/mocha/bin/mocha -- -R spec"
   }
