@@ -4,29 +4,24 @@
 - **Format of the commit message**
 
 ```
-feat: add travis.yml
+ci: add travis.yml
 ^--^  ^------------^
 |     |
 |     +-> Summary in present tense.
 |
-+-------> Type: feat, fix, docs, style, refactor, test or chore.
++-------> Type: build, ci, docs, feat, fix, perf, refactor, test
 ```
 
 - **Type values**
 
-	* **feat** (new feature for the user, not a new feature for build script)
-	* **fix** (bug fix for the user, not a fix to a build script)
-	* **docs** (changes to the documentation)
-	* **style** (formatting, missing semi colons, etc; no production code change)
-	* **refactor** (refactoring production code, eg. renaming a variable)
-	* **test** (adding missing tests, refactoring tests; no production code change)
-	* **chore** (updating grunt tasks etc; no production code change)
+    * **build**: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
+    * **ci**: Changes to our CI configuration files and scripts (examples: CircleCi, SauceLabs)
+    * **docs**: Documentation only changes
+    * **feat**: A new feature
+    * **fix**: A bug fix
+    * **perf**: A code change that improves performance
+    * **refactor**: A code change that neither fixes a bug nor adds a feature
+    * **test**: Adding missing tests or correcting existing tests
 
 
-#### Inspired by [Karma's commit style](http://karma-runner.github.io/latest/dev/git-commit-msg.html).
-
-
-
-
-
-
+#### Inspired by [Angular's commit style](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#-commit-message-format).
