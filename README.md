@@ -179,6 +179,14 @@ app.get('/path', function(req, res, next) {
   Fetch country information from remote IP addresses!
 
   ```js
+  // get country info from req.ip (default)
+  app.use(fetcher({
+    'ipaddr': 'ip',
+    'geo-info': 'headers.x-fetcher-geoinfo',
+    'access-country': true
+  }, {geoip: {}}));
+  
+  // get country info from req.headers['x-forwarded-for']
   var addOnOpt = {
     geoip: {
       keyName: 'headers.x-forwarded-for'

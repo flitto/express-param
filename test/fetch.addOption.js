@@ -43,7 +43,32 @@ describe('It can ', function() {
       });
   });
 
-  it('fetch geographic information from remote ip address', function(done) {
+  it('fetch geographic information from remote ip address(127.0.0.1)', function(done) {
+    var options;
+    var extraOption = {'geo-info': 'headers.x-fetcher-geoinfo'}
+      , addOnOpt = {geoip: {}};
+
+    app.use(fetcher(extraOption, addOnOpt));
+
+    app.use(function(req, res, next) {
+      var optional = ['ipaddr', 'geo-info'];
+      options = req.fetchParameter([], optional);
+
+      if (req.checkParamErr(options)) return next(options);
+
+      return res.send(req.headers['x-fetcher-geoinfo']);
+    });
+
+    request(app)
+      .get('/')
+      .expect(200, function(err, res) {
+        expect(err).to.not.exist;
+        expect(res.body).to.deep.equal(options['geo-info']);
+        done();
+      });
+  });
+
+  it('fetch geographic information from x-forwarded-for header', function(done) {
     var options;
     var extraOption = {'geo-info': 'headers.x-fetcher-geoinfo'}
       , addOnOpt = {geoip: {keyName: 'headers.x-forwarded-for'}};
@@ -61,10 +86,11 @@ describe('It can ', function() {
 
     request(app)
       .get('/')
-      .set('x-forwarded-for', '106.249.137.139')
+      .set('x-forwarded-for', '106.249.137.139, 8.8.8.8') // use 1'st ip if x-forwarded-for is ip list
       .expect(200, function(err, res) {
         expect(err).to.not.exist;
         expect(res.body).to.deep.equal(options['geo-info']);
+        expect(res.body.country).to.equal('KR');
         done();
       });
   });
