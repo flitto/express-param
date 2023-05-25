@@ -3,12 +3,15 @@
 var express = require('express')
   , request = require('supertest')
   , fetcher = require('../');
+const { expect } = require('chai')
 
 describe('It can ', function() {
   var app;
 
   beforeEach(function (done) {
     app = express();
+    app.use(express.urlencoded())
+    app.use(express.json())
     app.use(fetcher());
     done();
   });
@@ -209,4 +212,37 @@ describe('It can ', function() {
       .query({id: 21474836471})
       .expect(400, 'The parameter value is over the uint32 range', done);
   })
+
+  describe('receive string type error code. (required param)', function () {
+    beforeEach(function(done){
+      app.post('/path', function(req, res, next) {
+        var required = ['string:content']
+          , options = req.fetchParameter(required);
+
+        if (req.checkParamErr(options)) return next(options);
+
+        return res.send(options);
+      });
+
+      app.use(function(err, req, res, next) {
+        return res.status(err.code).send(err.message);
+      });
+      done();
+    })
+
+    function testStringTypeParam ({body, done}) {
+      request(app)
+        .post('/path')
+        .send(body)
+        .expect(400, 'The parameter value is not a string : content', done);
+    }
+
+    var notStringValues = [1, true, undefined, null, NaN, {}]
+    notStringValues.forEach((args, i) => {
+      var body = { content: args }
+      it(`#${i}: value = ${args}`, function (done) {
+        testStringTypeParam ({body, done})
+      });
+    });
+  });
 });
