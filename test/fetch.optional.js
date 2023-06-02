@@ -156,6 +156,80 @@ describe('It can ', function() {
       });
   });
 
+  describe('fetch optional parameters with type: string, input: not string', function () {
+    beforeEach(function(done){
+      app.post('/path', function(req, res, next) {
+        var optional = ['string:content']
+          , options = req.fetchParameter([], optional);
+
+        if (req.checkParamErr(options)) return next(options);
+
+        return res.send(options);
+      });
+
+      app.use(function(err, req, res, next) {
+        return res.status(err.code).send(err.message);
+      });
+      done();
+    })
+
+    function testStringTypeParam ({body, done}) {
+      request(app)
+        .post('/path')
+        .send(body)
+        .expect(200, function(err, res) {
+          expect(err).to.not.exist;
+          expect(res.body).to.deep.equal({});
+          done();
+        });
+    }
+
+    var notStringValues = [1, true, undefined, null, NaN, {}]
+    notStringValues.forEach((args, i) => {
+      var body = { content: args }
+      it(`#${i}: value = ${args}`, function (done) {
+        testStringTypeParam ({body, done})
+      });
+    });
+  });
+
+  describe('fetch optional parameters with type: string and default value and input: not string', function () {
+    beforeEach(function(done){
+      app.post('/path', function(req, res, next) {
+        var optional = ['string:stream|=N']
+          , options = req.fetchParameter([], optional);
+
+        if (req.checkParamErr(options)) return next(options);
+
+        return res.send(options);
+      });
+
+      app.use(function(err, req, res, next) {
+        return res.status(err.code).send(err.message);
+      });
+      done();
+    })
+
+    function testStringTypeParam ({body, done}) {
+      request(app)
+        .post('/path')
+        .send(body)
+        .expect(200, function(err, res) {
+          expect(err).to.not.exist;
+          expect(res.body).to.deep.equal({ stream: 'N' });
+          done();
+        });
+    }
+
+    var notStringValues = [1, true, undefined, null, NaN, {}]
+    notStringValues.forEach((args, i) => {
+      var body = { content: args }
+      it(`#${i}: value = ${args}`, function (done) {
+        testStringTypeParam ({body, done})
+      });
+    });
+  });
+
   it('fetch optional parameters input number 0', function(done) {
     app.get('/path', function(req, res, next) {
       var required = []
